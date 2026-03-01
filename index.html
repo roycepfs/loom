@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konverti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:   #0B0B0B;
+  --white:   #FFFFFF;
+  --green:   #1CE0A0;
+  --green-dim: rgba(28,224,160,0.12);
+  --gray-50: #F7F7F5;
+  --gray-100:#EFEFED;
+  --gray-400:#9A9A96;
+  --gray-600:#5C5C58;
+  --border:  rgba(0,0,0,0.07);
+}
+
+html, body {
+  height: 100%;
+  background: var(--white);
+  font-family: 'Inter', sans-serif;
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ─── Page shell ─── */
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+/* ─── Header ─── */
+header {
+  padding: 28px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 10;
+}
+
+/* Logo SVG */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  text-decoration: none;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  color: var(--black);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--green);
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1.5px solid var(--green);
+  animation: ping 2.2s ease-out infinite;
+}
+
+@keyframes ping {
+  0%   { opacity: 0.7; transform: scale(0.7); }
+  100% { opacity: 0;   transform: scale(2); }
+}
+
+.live-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-600);
+  letter-spacing: 0.1px;
+}
+
+/* ─── Main ─── */
+main {
+  display: flex;
+  flex-direction: column;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 64px 48px 80px;
+  gap: 48px;
+}
+
+/* ─── Left panel ─── */
+.left {
+  padding-right: 0;
+  opacity: 0;
+  transform: translateY(22px);
+  animation: up 0.75s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 8px;
+  background: var(--green-dim);
+  border: 1px solid rgba(28,224,160,0.3);
+  border-radius: 100px;
+  margin-bottom: 28px;
+}
+
+.tag-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+}
+
+.tag-text {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #0D7A5A;
+}
+
+h1 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: -2px;
+  color: var(--black);
+  margin-bottom: 24px;
+}
+
+.h1-company {
+  position: relative;
+  display: inline;
+}
+
+.h1-company::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 100%;
+  height: 4px;
+  background: var(--green);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: line 0.55s cubic-bezier(0.16,1,0.3,1) 0.85s forwards;
+}
+
+@keyframes line { to { transform: scaleX(1); } }
+
+.desc {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--gray-600);
+  margin-bottom: 0;
+  max-width: 480px;
+}
+
+.desc strong {
+  color: var(--black);
+  font-weight: 600;
+}
+
+/* Stats row */
+.stats {
+  display: flex;
+  gap: 32px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.stat-item {}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-value.green { color: var(--green); }
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--gray-400);
+}
+
+/* ─── Right panel ─── */
+.right {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: up 0.75s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+}
+
+@keyframes up {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Video card */
+.video-card {
+  background: var(--white);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.03),
+    0 4px 6px rgba(0,0,0,0.03),
+    0 12px 32px rgba(0,0,0,0.06),
+    0 40px 80px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+/* Top accent line */
+.video-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green) 0%, #08E8C0 100%);
+  z-index: 2;
+}
+
+.card-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--border);
+}
+
+.chrome-dots {
+  display: flex;
+  gap: 7px;
+}
+
+.chrome-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.cd-r { background: #FF5F57; }
+.cd-y { background: #FFBD2E; }
+.cd-g { background: #28C840; }
+
+.chrome-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-400);
+  letter-spacing: 0.2px;
+}
+
+/* Video ratio */
+.video-ratio {
+  position: relative;
+  padding-bottom: 56.25%;
+  background: #0B0B0B;
+}
+
+.video-ratio iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--gray-50);
+  border-top: 1px solid var(--border);
+}
+
+.footer-duration {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-400);
+}
+
+.clock-icon {
+  width: 13px;
+  height: 13px;
+  opacity: 0.6;
+}
+
+.footer-cta {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--black);
+  letter-spacing: -0.2px;
+}
+
+.footer-cta span {
+  color: var(--green);
+}
+
+/* Delivered badge */
+.badge-delivered {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  background: var(--green-dim);
+  border: 1px solid rgba(28,224,160,0.25);
+  border-radius: 100px;
+  margin-top: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0D7A5A;
+  letter-spacing: 0.1px;
+}
+
+.check-icon {
+  width: 14px;
+  height: 14px;
+  background: var(--green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.check-icon::after {
+  content: '';
+  width: 5px;
+  height: 3px;
+  border-left: 1.5px solid white;
+  border-bottom: 1.5px solid white;
+  transform: rotate(-45deg) translateY(-1px);
+  display: block;
+}
+
+/* ─── Footer ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 22px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-brand {
+  font-size: 12px;
+  color: var(--gray-400);
+  font-weight: 400;
+}
+
+.footer-brand strong {
+  color: var(--black);
+  font-weight: 600;
+}
+
+.footer-legal {
+  font-size: 11px;
+  color: var(--gray-400);
+  letter-spacing: 0.2px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 600px) {
+  main { padding: 48px 24px 64px; gap: 36px; }
+  header { padding: 20px 24px; }
+  footer { padding: 18px 24px; flex-direction: column; gap: 6px; align-items: flex-start; }
+  h1 { letter-spacing: -1.5px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ── Header ── -->
+  <header>
+    <a class="logo" href="#">
+      <span class="logo-text">Konverti</span>
+    </a>
+    <div class="header-right">
+      <div class="live-dot"></div>
+      <span class="live-label">Message personnel</span>
+    </div>
+  </header>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <!-- Left -->
+    <div class="left">
+
+      <div class="tag">
+        <div class="tag-dot"></div>
+        <span class="tag-text">Vidéo exclusive</span>
+      </div>
+
+      <h1>
+        60 secondes<br>pour <span class="h1-company" id="companyDisplay">vous</span>.
+      </h1>
+
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value">21</div>
+          <div class="stat-label">Jours livraison</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value green">1 000</div>
+          <div class="stat-label">Prospects chargés</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Domaines dédiés</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right -->
+    <div class="right">
+      <div class="video-card">
+        <div class="card-chrome">
+          <div class="chrome-dots">
+            <div class="chrome-dot cd-r"></div>
+            <div class="chrome-dot cd-y"></div>
+            <div class="chrome-dot cd-g"></div>
+          </div>
+          <span class="chrome-label">Royce Pfirsch · Fondateur, Konverti</span>
+        </div>
+
+        <div class="video-ratio">
+          <iframe
+            id="loomFrame"
+            src="https://www.loom.com/embed/VOTRE_ID_ICI"
+            allowfullscreen
+            allow="autoplay; fullscreen">
+          </iframe>
+        </div>
+
+        <div class="card-footer">
+          <div class="footer-duration">
+            <svg class="clock-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M7 4.5V7.2l1.8 1.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            60 secondes
+          </div>
+          <span class="footer-cta">Répondre à l'email <span>→</span></span>
+        </div>
+      </div>
+
+      <div class="badge-delivered">
+        <div class="check-icon"></div>
+        Infrastructure prête · DNS · Warm-up · Séquences
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="footer-brand">
+      Envoyé par <strong>Royce Pfirsch</strong> · Konverti
+    </div>
+    <div class="footer-legal">
+      Cold email infrastructure · France
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const params  = new URLSearchParams(window.location.search);
+  const company = params.get('company');
+  const segment = params.get('v') || 'esn';
+
+  if (company) {
+    document.getElementById('companyDisplay').textContent = company;
+    document.title = `Konverti — ${company}`;
+  }
+
+  // Remplace les IDs par tes vrais IDs Loom
+  const looms = {
+    esn:       'https://www.loom.com/embed/VOTRE_ID_ESN',
+    web:       'https://www.loom.com/embed/VOTRE_ID_WEB',
+    marketing: 'https://www.loom.com/embed/VOTRE_ID_MARKETING',
+  };
+
+  document.getElementById('loomFrame').src = looms[segment] || looms['esn'];
+</script>
+
+</body>
+</html>
