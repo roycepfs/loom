@@ -470,10 +470,12 @@ footer {
 
         <div class="video-ratio">
           <iframe
-            id="loomFrame"
-            src="https://www.loom.com/embed/VOTRE_ID_ICI"
+            src="https://www.loom.com/embed/d5bbbfabc31c46199ff97a837600bb09"
+            frameborder="0"
+            webkitallowfullscreen
+            mozallowfullscreen
             allowfullscreen
-            allow="autoplay; fullscreen">
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
           </iframe>
         </div>
 
@@ -519,14 +521,7 @@ footer {
     document.title = `Konverti — ${company}`;
   }
 
-  // Remplace les IDs par tes vrais IDs Loom
-  const looms = {
-    esn:       'https://www.loom.com/embed/VOTRE_ID_ESN',
-    web:       'https://www.loom.com/embed/VOTRE_ID_WEB',
-    marketing: 'https://www.loom.com/embed/VOTRE_ID_MARKETING',
-  };
-
-  document.getElementById('loomFrame').src = looms[segment] || looms['esn'];
+  // Vidéo unique pour tous les segments
 </script>
 
 </body>
