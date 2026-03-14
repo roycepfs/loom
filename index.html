@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Konverti</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,9 +20,12 @@
   --gray-600:#5C5C58;
   --border:  rgba(0,0,0,0.07);
   --red:     #FF4A4A;
-  --red-dim: rgba(255,74,74,0.08);
-  --orange:  #FFAA2E;
-  --orange-dim: rgba(255,170,46,0.08);
+  --red-dim: rgba(255,74,74,0.06);
+  --orange:  #FF9F1C;
+  --orange-dim: rgba(255,159,28,0.06);
+  --scan-bg: #0C0F14;
+  --scan-border: rgba(255,255,255,0.06);
+  --scan-text: #A0A8B8;
 }
 
 html, body {
@@ -55,558 +58,434 @@ header {
   z-index: 10;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
+.logo { display: flex; align-items: center; text-decoration: none; }
+.logo-text { font-size: 22px; font-weight: 900; letter-spacing: -0.8px; color: var(--black); }
 
-.logo-text {
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: -0.8px;
-  color: var(--black);
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.header-right { display: flex; align-items: center; gap: 10px; }
 
 .live-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--green);
-  border-radius: 50%;
-  flex-shrink: 0;
+  width: 7px; height: 7px;
+  background: var(--green); border-radius: 50%;
   position: relative;
 }
-
 .live-dot::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
+  content: ''; position: absolute; inset: -3px; border-radius: 50%;
   border: 1.5px solid var(--green);
   animation: ping 2.2s ease-out infinite;
 }
+@keyframes ping { 0% { opacity:.7; transform:scale(.7); } 100% { opacity:0; transform:scale(2); } }
 
-@keyframes ping {
-  0%   { opacity: 0.7; transform: scale(0.7); }
-  100% { opacity: 0;   transform: scale(2); }
-}
-
-.live-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--gray-600);
-  letter-spacing: 0.1px;
-}
+.live-label { font-size: 12px; font-weight: 500; color: var(--gray-600); }
 
 /* ─── Main ─── */
 main {
-  display: flex;
-  flex-direction: column;
-  max-width: 680px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 64px 48px 80px;
-  gap: 48px;
+  display: flex; flex-direction: column;
+  max-width: 720px; margin: 0 auto; width: 100%;
+  padding: 64px 48px 80px; gap: 56px;
 }
 
-/* ─── Left panel ─── */
+/* ─── Intro section ─── */
 .left {
-  padding-right: 0;
-  opacity: 0;
-  transform: translateY(22px);
-  animation: up 0.75s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
+  opacity: 0; transform: translateY(22px);
+  animation: up .75s cubic-bezier(.16,1,.3,1) .05s forwards;
 }
 
 .tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: inline-flex; align-items: center; gap: 8px;
   padding: 6px 14px 6px 8px;
-  background: var(--green-dim);
-  border: 1px solid rgba(28,224,160,0.3);
-  border-radius: 100px;
-  margin-bottom: 28px;
+  background: var(--green-dim); border: 1px solid rgba(28,224,160,0.3);
+  border-radius: 100px; margin-bottom: 28px;
 }
-
-.tag-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--green);
-  border-radius: 50%;
-}
-
-.tag-text {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #0D7A5A;
-}
+.tag-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+.tag-text { font-size: 11px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; color: #0D7A5A; }
 
 h1 {
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 900;
-  line-height: 1.04;
-  letter-spacing: -2px;
-  color: var(--black);
-  margin-bottom: 24px;
+  font-size: clamp(36px, 5vw, 56px); font-weight: 900;
+  line-height: 1.04; letter-spacing: -2px; margin-bottom: 24px;
 }
 
-.h1-company {
-  position: relative;
-  display: inline;
-}
-
+.h1-company { position: relative; display: inline; }
 .h1-company::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 2px;
-  width: 100%;
-  height: 4px;
-  background: var(--green);
-  border-radius: 2px;
-  transform: scaleX(0);
-  transform-origin: left;
-  animation: line 0.55s cubic-bezier(0.16,1,0.3,1) 0.85s forwards;
+  content: ''; position: absolute; left: 0; bottom: 2px;
+  width: 100%; height: 4px; background: var(--green); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left;
+  animation: line .55s cubic-bezier(.16,1,.3,1) .85s forwards;
 }
-
 @keyframes line { to { transform: scaleX(1); } }
 
-.desc {
-  font-size: 15px;
-  font-weight: 300;
-  line-height: 1.7;
-  color: var(--gray-600);
-  margin-bottom: 0;
-  max-width: 480px;
-}
-
-.desc strong {
-  color: var(--black);
-  font-weight: 600;
-}
-
-/* Stats row */
 .stats {
-  display: flex;
-  gap: 32px;
-  padding-top: 40px;
+  display: flex; gap: 32px; padding-top: 40px;
   border-top: 1px solid var(--border);
 }
-
 .stat-value {
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -1px;
-  color: var(--black);
-  line-height: 1;
-  margin-bottom: 4px;
+  font-size: 28px; font-weight: 900; letter-spacing: -1px;
+  line-height: 1; margin-bottom: 4px;
 }
-
 .stat-value.green { color: var(--green); }
+.stat-label { font-size: 11px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase; color: var(--gray-400); }
 
-.stat-label {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--gray-400);
-}
-
-/* ─── Right panel ─── */
+/* ─── Video section ─── */
 .right {
-  opacity: 0;
-  transform: translateY(22px);
-  animation: up 0.75s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+  opacity: 0; transform: translateY(22px);
+  animation: up .75s cubic-bezier(.16,1,.3,1) .2s forwards;
 }
+@keyframes up { to { opacity:1; transform:translateY(0); } }
 
-@keyframes up {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Video card */
 .video-card {
-  background: var(--white);
-  border-radius: 24px;
-  border: 1px solid var(--border);
-  overflow: hidden;
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,0.03),
-    0 4px 6px rgba(0,0,0,0.03),
-    0 12px 32px rgba(0,0,0,0.06),
-    0 40px 80px rgba(0,0,0,0.05);
+  background: var(--white); border-radius: 24px;
+  border: 1px solid var(--border); overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.03), 0 4px 6px rgba(0,0,0,.03),
+    0 12px 32px rgba(0,0,0,.06), 0 40px 80px rgba(0,0,0,.05);
   position: relative;
 }
-
 .video-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--green) 0%, #08E8C0 100%);
-  z-index: 2;
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: linear-gradient(90deg, var(--green), #08E8C0); z-index: 2;
 }
 
 .card-chrome {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background: var(--gray-50);
-  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; background: var(--gray-50); border-bottom: 1px solid var(--border);
 }
+.chrome-dots { display: flex; gap: 7px; }
+.chrome-dot { width: 11px; height: 11px; border-radius: 50%; }
+.cd-r { background: #FF5F57; } .cd-y { background: #FFBD2E; } .cd-g { background: #28C840; }
+.chrome-label { font-size: 11px; font-weight: 500; color: var(--gray-400); }
 
-.chrome-dots {
-  display: flex;
-  gap: 7px;
-}
-
-.chrome-dot {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-}
-
-.cd-r { background: #FF5F57; }
-.cd-y { background: #FFBD2E; }
-.cd-g { background: #28C840; }
-
-.chrome-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--gray-400);
-  letter-spacing: 0.2px;
-}
-
-.video-ratio {
-  position: relative;
-  padding-bottom: 56.25%;
-  background: #0B0B0B;
-}
-
-.video-ratio iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+.video-ratio { position: relative; padding-bottom: 56.25%; background: #0B0B0B; }
+.video-ratio iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 
 .card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background: var(--gray-50);
-  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; background: var(--gray-50); border-top: 1px solid var(--border);
 }
+.footer-duration { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: var(--gray-400); }
+.clock-icon { width: 13px; height: 13px; opacity: .6; }
+.footer-cta { font-size: 12px; font-weight: 600; color: var(--black); }
+.footer-cta span { color: var(--green); }
 
-.footer-duration {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--gray-400);
-}
-
-.clock-icon {
-  width: 13px;
-  height: 13px;
-  opacity: 0.6;
-}
-
-.footer-cta {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--black);
-  letter-spacing: -0.2px;
-}
-
-.footer-cta span {
-  color: var(--green);
-}
-
-/* Delivered badge */
 .badge-delivered {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 16px;
-  background: var(--green-dim);
-  border: 1px solid rgba(28,224,160,0.25);
-  border-radius: 100px;
-  margin-top: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #0D7A5A;
-  letter-spacing: 0.1px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; background: var(--green-dim);
+  border: 1px solid rgba(28,224,160,0.25); border-radius: 100px;
+  margin-top: 20px; font-size: 12px; font-weight: 600; color: #0D7A5A;
 }
-
 .check-icon {
-  width: 14px;
-  height: 14px;
-  background: var(--green);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  width: 14px; height: 14px; background: var(--green); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
 }
-
 .check-icon::after {
-  content: '';
-  width: 5px;
-  height: 3px;
-  border-left: 1.5px solid white;
-  border-bottom: 1.5px solid white;
+  content: ''; width: 5px; height: 3px;
+  border-left: 1.5px solid white; border-bottom: 1.5px solid white;
   transform: rotate(-45deg) translateY(-1px);
-  display: block;
 }
 
-/* ─── Diagnostic Card (NEW) ─── */
+/* ══════════════════════════════════════
+   DIAGNOSTIC DNS — DARK TERMINAL CARD
+   ══════════════════════════════════════ */
+
 .diag-section {
-  opacity: 0;
-  transform: translateY(22px);
-  animation: up 0.75s cubic-bezier(0.16,1,0.3,1) 0.35s forwards;
+  opacity: 0; transform: translateY(30px);
+  animation: up .75s cubic-bezier(.16,1,.3,1) .35s forwards;
 }
 
 .diag-card {
-  background: var(--white);
+  background: var(--scan-bg);
   border-radius: 20px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--scan-border);
   overflow: hidden;
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.03),
-    0 4px 6px rgba(0,0,0,0.03),
-    0 12px 32px rgba(0,0,0,0.06);
+    0 0 0 1px rgba(255,255,255,.02),
+    0 8px 32px rgba(0,0,0,.25),
+    0 40px 80px rgba(0,0,0,.2);
+  position: relative;
 }
 
-.diag-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background: var(--gray-50);
-  border-bottom: 1px solid var(--border);
+/* Top glow line */
+.diag-card::before {
+  content: ''; position: absolute; top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(28,224,160,0.4), transparent);
 }
 
-.diag-header-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* Header bar */
+.diag-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px;
+  background: rgba(255,255,255,.02);
+  border-bottom: 1px solid var(--scan-border);
 }
 
-.diag-header-icon {
-  font-size: 14px;
+.diag-top-left {
+  display: flex; align-items: center; gap: 10px;
 }
 
-.diag-header-text {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--black);
-  letter-spacing: -0.2px;
+.diag-pulse {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(28,224,160,.5);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(28,224,160,.3); }
+  50% { box-shadow: 0 0 16px rgba(28,224,160,.7); }
 }
 
-.diag-header-domain {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--gray-400);
-  font-family: 'Inter', monospace;
+.diag-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; font-weight: 600; color: #fff;
+  letter-spacing: .5px; text-transform: uppercase;
 }
 
-.diag-body {
-  padding: 24px 20px;
+.diag-domain-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  color: var(--green); background: rgba(28,224,160,.08);
+  padding: 4px 12px; border-radius: 6px;
+  border: 1px solid rgba(28,224,160,.15);
 }
 
-.diag-loading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 0;
-  font-size: 13px;
-  color: var(--gray-600);
+/* Body */
+.diag-body { padding: 28px 24px; }
+
+/* Loading state */
+.scan-loading {
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 12px 0;
 }
 
-.spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--border);
+.scan-step {
+  display: flex; align-items: center; gap: 12px;
+  opacity: 0;
+}
+
+.scan-step.active {
+  animation: fadeIn .3s ease forwards;
+}
+
+.scan-step.done .scan-step-spinner { display: none; }
+.scan-step.done .scan-step-check { display: flex; }
+
+@keyframes fadeIn { to { opacity: 1; } }
+
+.scan-step-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.08);
   border-top-color: var(--green);
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: spin .6s linear infinite;
+  flex-shrink: 0;
 }
-
 @keyframes spin { to { transform: rotate(360deg); } }
 
+.scan-step-check {
+  display: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--green);
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+.scan-step-check::after {
+  content: ''; width: 5px; height: 3px;
+  border-left: 1.5px solid var(--scan-bg);
+  border-bottom: 1.5px solid var(--scan-bg);
+  transform: rotate(-45deg) translateY(-0.5px);
+}
+
+.scan-step-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; color: var(--scan-text);
+}
+.scan-step.done .scan-step-text { color: rgba(255,255,255,.5); }
+
+/* Results */
 .diag-results { display: none; }
 
-.diag-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  opacity: 0;
-  transform: translateX(-10px);
+.dns-row {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--scan-border);
+  opacity: 0; transform: translateY(8px);
+}
+.dns-row:last-child { border-bottom: none; }
+.dns-row.show { animation: rowIn .45s cubic-bezier(.16,1,.3,1) forwards; }
+@keyframes rowIn { to { opacity: 1; transform: translateY(0); } }
+
+/* Status indicator */
+.dns-status {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; margin-top: 2px;
+}
+.dns-status.ok { background: rgba(28,224,160,.1); }
+.dns-status.warn { background: rgba(255,159,28,.1); }
+.dns-status.bad { background: rgba(255,74,74,.1); }
+
+.dns-info { flex: 1; min-width: 0; }
+
+.dns-name-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
 }
 
-.diag-row:last-child { border-bottom: none; }
-
-.diag-row.show {
-  animation: slideIn 0.35s cubic-bezier(0.16,1,0.3,1) forwards;
+.dns-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; font-weight: 600; letter-spacing: .5px;
 }
+.dns-name.ok { color: var(--green); }
+.dns-name.warn { color: var(--orange); }
+.dns-name.bad { color: var(--red); }
 
-@keyframes slideIn {
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.diag-emoji { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-
-.diag-info { flex: 1; }
-
-.diag-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
+.dns-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; font-weight: 600; letter-spacing: .8px;
   text-transform: uppercase;
-  margin-bottom: 3px;
+  padding: 2px 8px; border-radius: 4px;
+}
+.dns-badge.ok { background: rgba(28,224,160,.1); color: var(--green); }
+.dns-badge.warn { background: rgba(255,159,28,.1); color: var(--orange); }
+.dns-badge.bad { background: rgba(255,74,74,.1); color: var(--red); }
+
+.dns-detail {
+  font-size: 13px; font-weight: 400;
+  color: var(--scan-text); line-height: 1.6;
 }
 
-.diag-label.ok { color: var(--green); }
-.diag-label.warn { color: var(--orange); }
-.diag-label.bad { color: var(--red); }
-
-.diag-detail {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--gray-600);
-  line-height: 1.5;
-}
-
-.diag-score-section {
+/* Score gauge */
+.score-wrap {
   display: none;
   text-align: center;
-  padding: 24px 0 8px;
-  border-top: 1px solid var(--border);
-  margin-top: 8px;
+  padding: 32px 0 16px;
+  border-top: 1px solid var(--scan-border);
+  margin-top: 12px;
 }
 
-.diag-score-number {
-  font-size: 56px;
-  font-weight: 900;
-  letter-spacing: -3px;
+.gauge-container {
+  position: relative;
+  width: 160px; height: 160px;
+  margin: 0 auto 16px;
+}
+
+.gauge-svg {
+  width: 160px; height: 160px;
+  transform: rotate(-90deg);
+}
+
+.gauge-bg {
+  fill: none; stroke: rgba(255,255,255,.05); stroke-width: 8;
+}
+
+.gauge-fill {
+  fill: none; stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 408;
+  stroke-dashoffset: 408;
+  transition: stroke-dashoffset 1.5s cubic-bezier(.16,1,.3,1),
+              stroke .5s ease;
+  filter: drop-shadow(0 0 8px var(--green));
+}
+
+.gauge-score {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.gauge-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 48px; font-weight: 400;
   line-height: 1;
-  margin-bottom: 6px;
+  letter-spacing: -2px;
 }
 
-.diag-score-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--gray-400);
-  letter-spacing: 0.5px;
+.gauge-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; font-weight: 500;
+  color: var(--scan-text);
+  letter-spacing: 1.5px;
   text-transform: uppercase;
+  margin-top: 4px;
 }
 
-.diag-verdict {
+/* Verdict */
+.verdict-box {
   display: none;
-  margin-top: 20px;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.6;
-  color: var(--gray-600);
+  margin-top: 24px; padding: 20px;
+  border-radius: 14px;
+  border: 1px solid var(--scan-border);
+  background: rgba(255,255,255,.02);
 }
 
-.diag-verdict strong { color: var(--black); font-weight: 600; }
+.verdict-text {
+  font-size: 14px; line-height: 1.7; color: var(--scan-text);
+}
+.verdict-text strong { color: #fff; font-weight: 600; }
 
-.diag-verdict.bad-bg { background: var(--red-dim); border: 1px solid rgba(255,74,74,0.15); }
-.diag-verdict.warn-bg { background: var(--orange-dim); border: 1px solid rgba(255,170,46,0.15); }
-.diag-verdict.ok-bg { background: var(--green-dim); border: 1px solid rgba(28,224,160,0.15); }
+/* Verify link */
+.verify-line {
+  display: none;
+  margin-top: 16px;
+  text-align: center;
+}
+.verify-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: rgba(255,255,255,.25);
+  text-decoration: none; letter-spacing: .3px;
+  transition: color .15s;
+}
+.verify-link:hover { color: rgba(255,255,255,.5); }
 
 /* CTA */
-.diag-cta {
-  display: none;
-  margin-top: 20px;
-}
+.diag-cta-wrap { display: none; margin-top: 28px; }
 
-.cta-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 16px 24px;
-  background: var(--green);
-  color: var(--black);
-  border: none;
-  border-radius: 14px;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  cursor: pointer;
+.cta-audit {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 18px 24px;
+  background: var(--green); color: var(--scan-bg);
+  border: none; border-radius: 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 700;
+  letter-spacing: -.3px; cursor: pointer;
   text-decoration: none;
-  transition: all 0.15s;
+  transition: all .2s;
 }
-
-.cta-main:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(28,224,160,0.3); }
-
-.cta-secondary {
-  display: block;
-  text-align: center;
-  margin-top: 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--gray-400);
-  text-decoration: none;
-  transition: color 0.15s;
+.cta-audit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(28,224,160,.25);
 }
+.cta-audit-arrow {
+  font-size: 18px; transition: transform .2s;
+}
+.cta-audit:hover .cta-audit-arrow { transform: translateX(3px); }
 
-.cta-secondary:hover { color: var(--black); }
+.cta-call {
+  display: block; text-align: center; margin-top: 12px;
+  font-size: 12px; font-weight: 500; color: var(--scan-text);
+  text-decoration: none; transition: color .15s;
+}
+.cta-call:hover { color: #fff; }
 
 /* ─── Footer ─── */
 footer {
-  border-top: 1px solid var(--border);
-  padding: 22px 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  border-top: 1px solid var(--border); padding: 22px 48px;
+  display: flex; align-items: center; justify-content: space-between;
 }
-
-.footer-brand {
-  font-size: 12px;
-  color: var(--gray-400);
-  font-weight: 400;
-}
-
-.footer-brand strong {
-  color: var(--black);
-  font-weight: 600;
-}
-
-.footer-legal {
-  font-size: 11px;
-  color: var(--gray-400);
-  letter-spacing: 0.2px;
-}
+.footer-brand { font-size: 12px; color: var(--gray-400); }
+.footer-brand strong { color: var(--black); font-weight: 600; }
+.footer-legal { font-size: 11px; color: var(--gray-400); }
 
 /* ─── Responsive ─── */
 @media (max-width: 600px) {
-  main { padding: 48px 24px 64px; gap: 36px; }
-  header { padding: 20px 24px; }
-  footer { padding: 18px 24px; flex-direction: column; gap: 6px; align-items: flex-start; }
+  main { padding: 48px 20px 64px; gap: 40px; }
+  header { padding: 20px 20px; }
+  footer { padding: 18px 20px; flex-direction: column; gap: 6px; align-items: flex-start; }
   h1 { letter-spacing: -1.5px; }
   .stats { gap: 20px; }
-  .stat-value { font-size: 24px; }
-  .diag-score-number { font-size: 44px; }
+  .stat-value { font-size: 22px; }
+  .diag-body { padding: 20px 16px; }
+  .diag-top { padding: 14px 16px; }
+  .gauge-container { width: 130px; height: 130px; }
+  .gauge-svg { width: 130px; height: 130px; }
+  .gauge-number { font-size: 40px; }
 }
 </style>
 </head>
@@ -626,17 +505,13 @@ footer {
 
   <main>
 
-    <!-- Intro -->
+    <!-- ── Intro ── -->
     <div class="left">
       <div class="tag">
         <div class="tag-dot"></div>
         <span class="tag-text">Vidéo exclusive</span>
       </div>
-
-      <h1>
-        60 secondes<br>pour <span class="h1-company" id="companyDisplay">vous</span>.
-      </h1>
-
+      <h1>60 secondes<br>pour <span class="h1-company" id="companyDisplay">vous</span>.</h1>
       <div class="stats">
         <div class="stat-item">
           <div class="stat-value">21</div>
@@ -653,7 +528,7 @@ footer {
       </div>
     </div>
 
-    <!-- Vidéo -->
+    <!-- ── Vidéo ── -->
     <div class="right">
       <div class="video-card">
         <div class="card-chrome">
@@ -664,91 +539,130 @@ footer {
           </div>
           <span class="chrome-label">Royce Pfirsch · Fondateur, Konverti</span>
         </div>
-
         <div class="video-ratio">
-          <iframe
-            src="https://www.loom.com/embed/d5bbbfabc31c46199ff97a837600bb09"
-            frameborder="0"
-            webkitallowfullscreen
-            mozallowfullscreen
-            allowfullscreen>
-          </iframe>
+          <iframe src="https://www.loom.com/embed/d5bbbfabc31c46199ff97a837600bb09"
+            frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
         </div>
-
         <div class="card-footer">
           <div class="footer-duration">
-            <svg class="clock-icon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/>
-              <path d="M7 4.5V7.2l1.8 1.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-            </svg>
+            <svg class="clock-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4.5V7.2l1.8 1.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
             60 secondes
           </div>
           <span class="footer-cta">Répondre à l'email <span>→</span></span>
         </div>
       </div>
-
       <div class="badge-delivered">
         <div class="check-icon"></div>
         Infrastructure prête · DNS · Warm-up · Séquences
       </div>
     </div>
 
-    <!-- Diagnostic DNS (NEW) -->
+    <!-- ══════════════════════════
+         DIAGNOSTIC DNS — DARK CARD
+         ══════════════════════════ -->
     <div class="diag-section" id="diagSection" style="display:none;">
       <div class="diag-card">
-        <div class="diag-header">
-          <div class="diag-header-left">
-            <span class="diag-header-icon">🔍</span>
-            <span class="diag-header-text">Diagnostic email</span>
+
+        <div class="diag-top">
+          <div class="diag-top-left">
+            <div class="diag-pulse"></div>
+            <span class="diag-title">Diagnostic email</span>
           </div>
-          <span class="diag-header-domain" id="diagDomain"></span>
+          <span class="diag-domain-badge" id="diagDomain"></span>
         </div>
 
         <div class="diag-body">
-          <div class="diag-loading" id="diagLoading">
-            <div class="spinner"></div>
-            Analyse de votre configuration email...
+
+          <!-- Scanning animation -->
+          <div class="scan-loading" id="scanLoading">
+            <div class="scan-step" id="step1">
+              <div class="scan-step-spinner"></div>
+              <div class="scan-step-check"></div>
+              <span class="scan-step-text">Vérification de l'enregistrement SPF...</span>
+            </div>
+            <div class="scan-step" id="step2">
+              <div class="scan-step-spinner"></div>
+              <div class="scan-step-check"></div>
+              <span class="scan-step-text">Analyse de la politique DMARC...</span>
+            </div>
+            <div class="scan-step" id="step3">
+              <div class="scan-step-spinner"></div>
+              <div class="scan-step-check"></div>
+              <span class="scan-step-text">Recherche des signatures DKIM...</span>
+            </div>
           </div>
 
+          <!-- Results -->
           <div class="diag-results" id="diagResults">
-            <div class="diag-row" id="rowSPF">
-              <span class="diag-emoji" id="emojiSPF"></span>
-              <div class="diag-info">
-                <div class="diag-label" id="labelSPF">SPF</div>
-                <div class="diag-detail" id="detailSPF"></div>
+            <div class="dns-row" id="rowSPF">
+              <div class="dns-status" id="statusSPF"></div>
+              <div class="dns-info">
+                <div class="dns-name-row">
+                  <span class="dns-name" id="nameSPF">SPF</span>
+                  <span class="dns-badge" id="badgeSPF"></span>
+                </div>
+                <div class="dns-detail" id="detailSPF"></div>
               </div>
             </div>
-            <div class="diag-row" id="rowDMARC">
-              <span class="diag-emoji" id="emojiDMARC"></span>
-              <div class="diag-info">
-                <div class="diag-label" id="labelDMARC">DMARC</div>
-                <div class="diag-detail" id="detailDMARC"></div>
+            <div class="dns-row" id="rowDMARC">
+              <div class="dns-status" id="statusDMARC"></div>
+              <div class="dns-info">
+                <div class="dns-name-row">
+                  <span class="dns-name" id="nameDMARC">DMARC</span>
+                  <span class="dns-badge" id="badgeDMARC"></span>
+                </div>
+                <div class="dns-detail" id="detailDMARC"></div>
               </div>
             </div>
-            <div class="diag-row" id="rowDKIM">
-              <span class="diag-emoji" id="emojiDKIM"></span>
-              <div class="diag-info">
-                <div class="diag-label" id="labelDKIM">DKIM</div>
-                <div class="diag-detail" id="detailDKIM"></div>
+            <div class="dns-row" id="rowDKIM">
+              <div class="dns-status" id="statusDKIM"></div>
+              <div class="dns-info">
+                <div class="dns-name-row">
+                  <span class="dns-name" id="nameDKIM">DKIM</span>
+                  <span class="dns-badge" id="badgeDKIM"></span>
+                </div>
+                <div class="dns-detail" id="detailDKIM"></div>
               </div>
             </div>
           </div>
 
-          <div class="diag-score-section" id="scoreSection">
-            <div class="diag-score-number" id="scoreNumber">0</div>
-            <div class="diag-score-label">Score infrastructure / 100</div>
+          <!-- Score gauge -->
+          <div class="score-wrap" id="scoreWrap">
+            <div class="gauge-container">
+              <svg class="gauge-svg" viewBox="0 0 160 160">
+                <circle class="gauge-bg" cx="80" cy="80" r="65"/>
+                <circle class="gauge-fill" id="gaugeFill" cx="80" cy="80" r="65"/>
+              </svg>
+              <div class="gauge-score">
+                <div class="gauge-number" id="gaugeNumber">0</div>
+                <div class="gauge-label">sur 100</div>
+              </div>
+            </div>
           </div>
 
-          <div class="diag-verdict" id="verdict"></div>
+          <!-- Verdict -->
+          <div class="verdict-box" id="verdictBox">
+            <div class="verdict-text" id="verdictText"></div>
+          </div>
 
-          <div class="diag-cta" id="diagCta">
-            <a class="cta-main" id="ctaAudit" href="#">
-              Audit complet gratuit → 2 min
+          <!-- Verify -->
+          <div class="verify-line" id="verifyLine">
+            <a class="verify-link" id="verifyLink" href="#" target="_blank">
+              ↗ Vérifier sur MXToolbox (données DNS publiques)
             </a>
-            <a class="cta-secondary" href="https://calendly.com/konverti/15min" target="_blank">
+          </div>
+
+          <!-- CTA -->
+          <div class="diag-cta-wrap" id="diagCta">
+            <a class="cta-audit" id="ctaAudit" href="#">
+              Audit complet gratuit — 2 minutes
+              <span class="cta-audit-arrow">→</span>
+            </a>
+            <a class="cta-call" href="https://calendly.com/konverti/15min" target="_blank">
               ou réserver un appel de 15 min avec Royce
             </a>
           </div>
+
         </div>
       </div>
     </div>
@@ -756,18 +670,14 @@ footer {
   </main>
 
   <footer>
-    <div class="footer-brand">
-      Envoyé par <strong>Royce Pfirsch</strong> · Konverti
-    </div>
-    <div class="footer-legal">
-      Cold email infrastructure · France
-    </div>
+    <div class="footer-brand">Envoyé par <strong>Royce Pfirsch</strong> · Konverti</div>
+    <div class="footer-legal">Cold email infrastructure · France</div>
   </footer>
 
 </div>
 
 <script>
-// ─── URL Parameters ───
+/* ─── URL Params ─── */
 const params  = new URLSearchParams(window.location.search);
 const company = params.get('company');
 const domain  = params.get('d');
@@ -777,141 +687,170 @@ if (company) {
   document.title = `Konverti — ${company}`;
 }
 
-// ─── DNS Scan ───
 if (domain) {
   document.getElementById('diagSection').style.display = '';
   document.getElementById('diagDomain').textContent = domain;
   document.getElementById('ctaAudit').href = `https://audit.konverti.co?d=${encodeURIComponent(domain)}`;
+  document.getElementById('verifyLink').href = `https://mxtoolbox.com/SuperTool.aspx?action=dmarc%3a${encodeURIComponent(domain)}&run=toolpage`;
   runScan(domain);
 }
 
-async function dnsQuery(name, type) {
+/* ─── DNS over HTTPS ─── */
+async function dns(name, type) {
   try {
-    const resp = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(name)}&type=${type}`);
-    return await resp.json();
-  } catch (e) {
-    return { Answer: [] };
-  }
+    const r = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(name)}&type=${type}`);
+    return await r.json();
+  } catch { return { Answer: [] }; }
 }
 
-async function checkSPF(domain) {
-  const data = await dnsQuery(domain, 'TXT');
-  if (!data.Answer) return { status: 'bad', emoji: '❌', label: 'SPF · Absent', detail: 'Aucun enregistrement SPF configuré. Les serveurs de vos prospects ne peuvent pas vérifier que vos emails sont légitimes.' };
-  for (const ans of data.Answer) {
-    const txt = (ans.data || '').replace(/"/g, '');
-    if (txt.includes('v=spf1')) {
-      if (txt.includes('-all')) return { status: 'ok', emoji: '✅', label: 'SPF · OK', detail: 'Votre SPF est correctement configuré avec une politique stricte.', score: 35 };
-      if (txt.includes('~all')) return { status: 'warn', emoji: '⚠️', label: 'SPF · Softfail', detail: 'SPF présent mais en softfail (~all). Les emails non autorisés ne sont pas strictement bloqués.', score: 20 };
-      if (txt.includes('+all')) return { status: 'bad', emoji: '❌', label: 'SPF · Dangereux', detail: 'SPF en +all : n\'importe qui peut envoyer des emails en votre nom. Critique.', score: 0 };
-      return { status: 'warn', emoji: '⚠️', label: 'SPF · Incomplet', detail: 'SPF présent mais sans directive de blocage claire.', score: 20 };
-    }
+/* ─── Checks ─── */
+async function checkSPF(d) {
+  const data = await dns(d, 'TXT');
+  if (!data.Answer) return { s:'bad', emoji:'✕', badge:'Absent', detail:'Aucun enregistrement SPF trouvé. Les serveurs de vos prospects ne peuvent pas vérifier que vos emails sont légitimes — risque élevé de placement en spam.', score:0 };
+  for (const a of data.Answer) {
+    const t = (a.data||'').replace(/"/g,'');
+    if (!t.includes('v=spf1')) continue;
+    if (t.includes('-all')) return { s:'ok', emoji:'✓', badge:'Strict', detail:'SPF correctement configuré avec une politique stricte (-all). Seuls vos serveurs autorisés peuvent envoyer en votre nom.', score:35 };
+    if (t.includes('~all')) return { s:'warn', emoji:'!', badge:'Softfail', detail:'SPF présent mais en softfail (~all). Les emails non autorisés ne sont pas strictement bloqués — certains serveurs les laisseront passer.', score:20 };
+    if (t.includes('+all')) return { s:'bad', emoji:'✕', badge:'Critique', detail:'SPF en +all — n\'importe quel serveur peut envoyer des emails depuis votre domaine. Faille de sécurité critique.', score:0 };
+    return { s:'warn', emoji:'!', badge:'Incomplet', detail:'SPF présent mais sans directive de blocage explicite. Protection partielle.', score:20 };
   }
-  return { status: 'bad', emoji: '❌', label: 'SPF · Absent', detail: 'Aucun enregistrement SPF. Sans lui, Gmail et Outlook traitent vos emails comme suspects.', score: 0 };
+  return { s:'bad', emoji:'✕', badge:'Absent', detail:'Aucun enregistrement SPF détecté. Gmail et Outlook traitent par défaut vos emails comme suspects.', score:0 };
 }
 
-async function checkDMARC(domain) {
-  const data = await dnsQuery(`_dmarc.${domain}`, 'TXT');
-  if (!data.Answer) return { status: 'bad', emoji: '❌', label: 'DMARC · Absent', detail: 'Aucun DMARC configuré. N\'importe qui peut usurper votre domaine, et vos emails ont un risque élevé de finir en spam.', score: 0 };
-  for (const ans of data.Answer) {
-    const txt = (ans.data || '').replace(/"/g, '');
-    if (txt.includes('v=DMARC1')) {
-      if (txt.includes('p=reject')) return { status: 'ok', emoji: '✅', label: 'DMARC · Reject', detail: 'Protection maximale. Les emails non autorisés sont rejetés.', score: 35 };
-      if (txt.includes('p=quarantine')) return { status: 'ok', emoji: '✅', label: 'DMARC · Quarantine', detail: 'Bonne protection. Les emails suspects sont mis en quarantaine.', score: 35 };
-      if (txt.includes('p=none')) return { status: 'warn', emoji: '⚠️', label: 'DMARC · p=none', detail: 'DMARC en mode observation uniquement. Aucun email n\'est bloqué, aucune protection réelle.', score: 15 };
-      return { status: 'warn', emoji: '⚠️', label: 'DMARC · Partiel', detail: 'DMARC présent mais sans politique de blocage claire.', score: 15 };
-    }
+async function checkDMARC(d) {
+  const data = await dns(`_dmarc.${d}`, 'TXT');
+  if (!data.Answer) return { s:'bad', emoji:'✕', badge:'Absent', detail:'Aucune politique DMARC configurée. Votre domaine peut être usurpé librement, et vos emails commerciaux risquent d\'être filtrés sans que vous le sachiez.', score:0 };
+  for (const a of data.Answer) {
+    const t = (a.data||'').replace(/"/g,'');
+    if (!t.includes('v=DMARC1')) continue;
+    if (t.includes('p=reject')) return { s:'ok', emoji:'✓', badge:'Reject', detail:'Protection maximale. Les emails non autorisés envoyés depuis votre domaine sont rejetés par les serveurs destinataires.', score:35 };
+    if (t.includes('p=quarantine')) return { s:'ok', emoji:'✓', badge:'Quarantine', detail:'Bonne protection. Les emails suspects sont placés en quarantaine (dossier spam) par les serveurs destinataires.', score:35 };
+    if (t.includes('p=none')) return { s:'warn', emoji:'!', badge:'p=none', detail:'DMARC en mode observation uniquement. Vous recevez des rapports, mais aucun email frauduleux n\'est bloqué. Pas de protection réelle.', score:15 };
+    return { s:'warn', emoji:'!', badge:'Partiel', detail:'DMARC présent mais sans politique de blocage claire.', score:15 };
   }
-  return { status: 'bad', emoji: '❌', label: 'DMARC · Absent', detail: 'Aucun DMARC configuré. Vos emails commerciaux sont probablement filtrés sans que vous le sachiez.', score: 0 };
+  return { s:'bad', emoji:'✕', badge:'Absent', detail:'Aucune politique DMARC. Depuis 2024, Gmail et Yahoo rejettent ou filtrent les emails provenant de domaines sans DMARC.', score:0 };
 }
 
-async function checkDKIM(domain) {
-  const selectors = ['default','google','selector1','selector2','k1','mail','dkim','brevo','sendinblue','protonmail','zoho'];
-  for (const sel of selectors) {
-    const data = await dnsQuery(`${sel}._domainkey.${domain}`, 'TXT');
-    if (data.Answer) {
-      for (const ans of data.Answer) {
-        if ((ans.data || '').includes('p=')) return { status: 'ok', emoji: '✅', label: `DKIM · Trouvé`, detail: `Signature DKIM détectée (sélecteur : ${sel}). Vos emails sont authentifiés.`, score: 30 };
-      }
-    }
-    const cname = await dnsQuery(`${sel}._domainkey.${domain}`, 'CNAME');
-    if (cname.Answer && cname.Answer.length > 0) return { status: 'ok', emoji: '✅', label: `DKIM · Trouvé`, detail: `Signature DKIM détectée (sélecteur : ${sel}). Vos emails sont authentifiés.`, score: 30 };
+async function checkDKIM(d) {
+  const sels = ['default','google','selector1','selector2','k1','k2','mail','dkim','brevo','sendinblue','protonmail','zoho','mxvault','cm','pm','mandrill','mailchimp','smtp'];
+  for (const s of sels) {
+    try {
+      const data = await dns(`${s}._domainkey.${d}`, 'TXT');
+      if (data.Answer) for (const a of data.Answer) { if ((a.data||'').includes('p=')) return { s:'ok', emoji:'✓', badge:'Vérifié', detail:`Signature DKIM trouvée (sélecteur : ${s}). Vos emails portent une preuve cryptographique d'authenticité.`, score:30 }; }
+    } catch {}
+    try {
+      const data = await dns(`${s}._domainkey.${d}`, 'CNAME');
+      if (data.Answer && data.Answer.length) return { s:'ok', emoji:'✓', badge:'Vérifié', detail:`Signature DKIM trouvée (sélecteur : ${s}). Vos emails portent une preuve cryptographique d'authenticité.`, score:30 };
+    } catch {}
   }
-  return { status: 'warn', emoji: '⚠️', label: 'DKIM · Non détecté', detail: 'Aucun DKIM trouvé sur les sélecteurs courants. Vos emails n\'ont pas de signature d\'authenticité vérifiable.', score: 0 };
+  return { s:'warn', emoji:'?', badge:'Non détecté', detail:'Aucune signature DKIM trouvée sur les sélecteurs courants. Cela ne signifie pas forcément qu\'il est absent — votre fournisseur utilise peut-être un sélecteur personnalisé.', score:0 };
 }
 
+/* ─── Scan orchestration ─── */
 async function runScan(domain) {
-  // Show loading
-  document.getElementById('diagLoading').style.display = 'flex';
-  document.getElementById('diagResults').style.display = 'none';
+  const s1 = document.getElementById('step1');
+  const s2 = document.getElementById('step2');
+  const s3 = document.getElementById('step3');
 
+  // Step 1: SPF
+  s1.classList.add('active');
   const spf = await checkSPF(domain);
+  s1.classList.add('done');
+
+  // Step 2: DMARC
+  await pause(200);
+  s2.classList.add('active');
   const dmarc = await checkDMARC(domain);
+  s2.classList.add('done');
+
+  // Step 3: DKIM
+  await pause(200);
+  s3.classList.add('active');
   const dkim = await checkDKIM(domain);
+  s3.classList.add('done');
 
-  const score = (spf.score || 0) + (dmarc.score || 0) + (dkim.score || 0);
+  const score = (spf.score||0) + (dmarc.score||0) + (dkim.score||0);
 
-  // Hide loading, show results
-  document.getElementById('diagLoading').style.display = 'none';
+  // Transition to results
+  await pause(500);
+  document.getElementById('scanLoading').style.display = 'none';
   document.getElementById('diagResults').style.display = 'block';
 
-  // SPF row
-  showRow('SPF', spf, 0);
-  // DMARC row
-  showRow('DMARC', dmarc, 300);
-  // DKIM row
-  showRow('DKIM', dkim, 600);
+  // Reveal rows
+  fillRow('SPF', spf);
+  setTimeout(() => document.getElementById('rowSPF').classList.add('show'), 50);
+  setTimeout(() => { fillRow('DMARC', dmarc); document.getElementById('rowDMARC').classList.add('show'); }, 350);
+  setTimeout(() => { fillRow('DKIM', dkim); document.getElementById('rowDKIM').classList.add('show'); }, 700);
 
-  // Score animation
+  // Score gauge
   setTimeout(() => {
-    const scoreSection = document.getElementById('scoreSection');
-    scoreSection.style.display = 'block';
-    const scoreEl = document.getElementById('scoreNumber');
-    scoreEl.style.color = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--orange)' : 'var(--red)';
-    animateScore(scoreEl, score);
-  }, 900);
+    document.getElementById('scoreWrap').style.display = 'block';
+    const color = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--orange)' : 'var(--red)';
+    const fill = document.getElementById('gaugeFill');
+    fill.style.stroke = color;
+    fill.style.filter = `drop-shadow(0 0 10px ${score >= 80 ? 'rgba(28,224,160,.4)' : score >= 50 ? 'rgba(255,159,28,.4)' : 'rgba(255,74,74,.4)'})`;
+    const circumference = 2 * Math.PI * 65; // ~408
+    const offset = circumference - (score / 100) * circumference;
+    setTimeout(() => { fill.style.strokeDashoffset = offset; }, 50);
+
+    const numEl = document.getElementById('gaugeNumber');
+    numEl.style.color = color;
+    animateNum(numEl, score);
+  }, 1050);
 
   // Verdict
   setTimeout(() => {
-    const verdict = document.getElementById('verdict');
-    verdict.style.display = 'block';
+    const box = document.getElementById('verdictBox');
+    const txt = document.getElementById('verdictText');
+    box.style.display = 'block';
     if (score < 50) {
-      verdict.className = 'diag-verdict bad-bg';
-      verdict.innerHTML = `<strong>Vos emails commerciaux ont un risque élevé de finir en spam.</strong> Les DSI et CTO que vous essayez d'atteindre ne voient probablement jamais vos messages. C'est un problème d'infrastructure, pas de copywriting.`;
+      box.style.borderColor = 'rgba(255,74,74,.12)';
+      box.style.background = 'rgba(255,74,74,.04)';
+      txt.innerHTML = `<strong>Vos emails commerciaux risquent fortement d'être filtrés.</strong> Les DSI et CTO que vous essayez d'atteindre ne voient probablement jamais vos messages. C'est un problème d'infrastructure, pas de copywriting — et ça se corrige.`;
     } else if (score < 80) {
-      verdict.className = 'diag-verdict warn-bg';
-      verdict.innerHTML = `<strong>Configuration partielle.</strong> Certains emails passent, d'autres non — et vous n'avez aucune visibilité sur lesquels. Quelques ajustements techniques changeraient significativement votre délivrabilité.`;
+      box.style.borderColor = 'rgba(255,159,28,.12)';
+      box.style.background = 'rgba(255,159,28,.04)';
+      txt.innerHTML = `<strong>Configuration partielle.</strong> Certains emails passent, d'autres non — sans visibilité sur lesquels. Quelques ajustements techniques changeraient significativement votre délivrabilité.`;
     } else {
-      verdict.className = 'diag-verdict ok-bg';
-      verdict.innerHTML = `<strong>Infrastructure email solide.</strong> La base technique est là. La question : est-ce que vous exploitez ce potentiel avec un système d'outbound structuré ?`;
+      box.style.borderColor = 'rgba(28,224,160,.12)';
+      box.style.background = 'rgba(28,224,160,.04)';
+      txt.innerHTML = `<strong>Infrastructure email solide.</strong> La base technique est en place. La question : est-ce que vous exploitez ce potentiel avec un système d'outbound structuré pour atteindre les décideurs que vous ciblez ?`;
     }
-  }, 1200);
+  }, 1800);
 
-  // CTA
+  // Verify + CTA
   setTimeout(() => {
+    document.getElementById('verifyLine').style.display = 'block';
     document.getElementById('diagCta').style.display = 'block';
-  }, 1500);
+  }, 2200);
 }
 
-function showRow(key, data, delay) {
-  setTimeout(() => {
-    document.getElementById(`emoji${key}`).textContent = data.emoji;
-    const label = document.getElementById(`label${key}`);
-    label.textContent = data.label;
-    label.className = `diag-label ${data.status === 'ok' ? 'ok' : data.status === 'warn' ? 'warn' : 'bad'}`;
-    document.getElementById(`detail${key}`).textContent = data.detail;
-    document.getElementById(`row${key}`).classList.add('show');
-  }, delay);
+function fillRow(key, data) {
+  const st = document.getElementById(`status${key}`);
+  st.className = `dns-status ${data.s === 'ok' ? 'ok' : data.s === 'warn' ? 'warn' : 'bad'}`;
+  st.textContent = data.emoji;
+
+  const nm = document.getElementById(`name${key}`);
+  nm.className = `dns-name ${data.s === 'ok' ? 'ok' : data.s === 'warn' ? 'warn' : 'bad'}`;
+
+  const bg = document.getElementById(`badge${key}`);
+  bg.className = `dns-badge ${data.s === 'ok' ? 'ok' : data.s === 'warn' ? 'warn' : 'bad'}`;
+  bg.textContent = data.badge;
+
+  document.getElementById(`detail${key}`).textContent = data.detail;
 }
 
-function animateScore(el, target) {
-  let current = 0;
-  const step = Math.max(1, Math.ceil(target / 40));
-  const interval = setInterval(() => {
-    current += step;
-    if (current >= target) { current = target; clearInterval(interval); }
-    el.textContent = current;
-  }, 30);
+function animateNum(el, target) {
+  let c = 0;
+  const step = Math.max(1, Math.ceil(target / 50));
+  const iv = setInterval(() => {
+    c += step; if (c >= target) { c = target; clearInterval(iv); }
+    el.textContent = c;
+  }, 25);
 }
+
+function pause(ms) { return new Promise(r => setTimeout(r, ms)); }
 </script>
 
 </body>
