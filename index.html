@@ -5,661 +5,672 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Konverti</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Söhne,+sans-serif&family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --black:   #0B0B0B;
-  --white:   #FFFFFF;
-  --green:   #1CE0A0;
-  --green-dim: rgba(28,224,160,0.12);
-  --gray-50: #F7F7F5;
-  --gray-100:#EFEFED;
-  --gray-400:#9A9A96;
-  --gray-600:#5C5C58;
-  --border:  rgba(0,0,0,0.07);
-  --red:     #FF4A4A;
-  --red-dim: rgba(255,74,74,0.06);
-  --orange:  #FF9F1C;
-  --orange-dim: rgba(255,159,28,0.06);
-  --scan-bg: #0C0F14;
+  --ink: #111110;
+  --paper: #FAFAF8;
+  --cream: #F4F3F0;
+  --stone: #E8E6E1;
+  --muted: #8A8880;
+  --dim: #B5B3AD;
+  --accent: #1CE0A0;
+  --accent-subtle: rgba(28,224,160,0.07);
+  --accent-mid: rgba(28,224,160,0.15);
+  --scan-bg: #111113;
+  --scan-surface: rgba(255,255,255,0.03);
   --scan-border: rgba(255,255,255,0.06);
-  --scan-text: #A0A8B8;
+  --scan-muted: #6B6F7B;
+  --scan-text: #9DA3B0;
+  --red: #E8503A;
+  --orange: #E89B3A;
+  --radius: 16px;
 }
 
-html, body {
-  height: 100%;
-  background: var(--white);
-  font-family: 'Inter', sans-serif;
-  color: var(--black);
+html { height: 100%; }
+
+body {
+  min-height: 100%;
+  background: var(--paper);
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-.page {
+/* ─── Layout ─── */
+.shell {
   min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ─── Header ─── */
-header {
-  padding: 28px 48px;
+.topbar {
+  padding: 24px 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 10;
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(250,250,248,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.logo { display: flex; align-items: center; text-decoration: none; }
-.logo-text { font-size: 22px; font-weight: 900; letter-spacing: -0.8px; color: var(--black); }
+.mark {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  color: var(--ink);
+  text-decoration: none;
+}
 
-.header-right { display: flex; align-items: center; gap: 10px; }
+.topbar-right {
+  display: flex; align-items: center; gap: 8px;
+}
 
-.live-dot {
-  width: 7px; height: 7px;
-  background: var(--green); border-radius: 50%;
+.pulse-ring {
+  width: 6px; height: 6px;
+  background: var(--accent); border-radius: 50%;
   position: relative;
 }
-.live-dot::after {
-  content: ''; position: absolute; inset: -3px; border-radius: 50%;
-  border: 1.5px solid var(--green);
-  animation: ping 2.2s ease-out infinite;
+.pulse-ring::before {
+  content: ''; position: absolute; inset: -4px;
+  border: 1px solid var(--accent); border-radius: 50%;
+  opacity: 0; animation: ring 2.5s ease-out infinite;
 }
-@keyframes ping { 0% { opacity:.7; transform:scale(.7); } 100% { opacity:0; transform:scale(2); } }
-
-.live-label { font-size: 12px; font-weight: 500; color: var(--gray-600); }
-
-/* ─── Main ─── */
-main {
-  display: flex; flex-direction: column;
-  max-width: 720px; margin: 0 auto; width: 100%;
-  padding: 64px 48px 80px; gap: 56px;
+@keyframes ring {
+  0% { opacity: .6; transform: scale(.6); }
+  100% { opacity: 0; transform: scale(2.2); }
 }
 
-/* ─── Intro section ─── */
-.left {
-  opacity: 0; transform: translateY(22px);
-  animation: up .75s cubic-bezier(.16,1,.3,1) .05s forwards;
+.topbar-label {
+  font-size: 11px; font-weight: 500;
+  color: var(--muted); letter-spacing: .2px;
 }
 
-.tag {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 14px 6px 8px;
-  background: var(--green-dim); border: 1px solid rgba(28,224,160,0.3);
-  border-radius: 100px; margin-bottom: 28px;
-}
-.tag-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
-.tag-text { font-size: 11px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; color: #0D7A5A; }
-
-h1 {
-  font-size: clamp(36px, 5vw, 56px); font-weight: 900;
-  line-height: 1.04; letter-spacing: -2px; margin-bottom: 24px;
+/* ─── Content ─── */
+.content {
+  flex: 1;
+  max-width: 660px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 56px 40px 100px;
 }
 
-.h1-company { position: relative; display: inline; }
-.h1-company::after {
-  content: ''; position: absolute; left: 0; bottom: 2px;
-  width: 100%; height: 4px; background: var(--green); border-radius: 2px;
+/* ─── Hero ─── */
+.hero {
+  margin-bottom: 56px;
+  opacity: 0; transform: translateY(16px);
+  animation: rise .7s cubic-bezier(.22,1,.36,1) .1s forwards;
+}
+
+@keyframes rise { to { opacity:1; transform:translateY(0); } }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 13px 5px 7px;
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-mid);
+  border-radius: 100px;
+  margin-bottom: 32px;
+}
+.pill-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+.pill-text {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: #0D7A5A;
+}
+
+.headline {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(38px, 5.5vw, 58px);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -1px;
+  color: var(--ink);
+  margin-bottom: 0;
+}
+
+.headline em {
+  font-style: normal;
+  position: relative;
+  display: inline-block;
+}
+.headline em::after {
+  content: '';
+  position: absolute; left: 0; bottom: 3px;
+  width: 100%; height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
   transform: scaleX(0); transform-origin: left;
-  animation: line .55s cubic-bezier(.16,1,.3,1) .85s forwards;
+  animation: underline .5s cubic-bezier(.22,1,.36,1) .9s forwards;
 }
-@keyframes line { to { transform: scaleX(1); } }
+@keyframes underline { to { transform: scaleX(1); } }
 
-.stats {
-  display: flex; gap: 32px; padding-top: 40px;
-  border-top: 1px solid var(--border);
+.kpis {
+  display: flex; gap: 36px;
+  margin-top: 44px;
+  padding-top: 32px;
+  border-top: 1px solid var(--stone);
 }
-.stat-value {
-  font-size: 28px; font-weight: 900; letter-spacing: -1px;
-  line-height: 1; margin-bottom: 4px;
+.kpi {}
+.kpi-num {
+  font-family: 'Instrument Serif', serif;
+  font-size: 32px; font-weight: 400;
+  letter-spacing: -1px; line-height: 1;
+  color: var(--ink);
+  margin-bottom: 3px;
 }
-.stat-value.green { color: var(--green); }
-.stat-label { font-size: 11px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase; color: var(--gray-400); }
+.kpi-num.g { color: var(--accent); }
+.kpi-label {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--dim);
+}
 
-/* ─── Video section ─── */
-.right {
-  opacity: 0; transform: translateY(22px);
-  animation: up .75s cubic-bezier(.16,1,.3,1) .2s forwards;
+/* ─── Video ─── */
+.video-wrap {
+  margin-bottom: 56px;
+  opacity: 0; transform: translateY(16px);
+  animation: rise .7s cubic-bezier(.22,1,.36,1) .25s forwards;
 }
-@keyframes up { to { opacity:1; transform:translateY(0); } }
 
-.video-card {
-  background: var(--white); border-radius: 24px;
-  border: 1px solid var(--border); overflow: hidden;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.03), 0 4px 6px rgba(0,0,0,.03),
-    0 12px 32px rgba(0,0,0,.06), 0 40px 80px rgba(0,0,0,.05);
+.player {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--stone);
+  background: var(--cream);
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.05);
+}
+
+.player-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--stone);
+}
+
+.bar-dots { display: flex; gap: 6px; }
+.bar-dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #FF5F57; } .dot-y { background: #FFBD2E; } .dot-g { background: #28C840; }
+
+.bar-name {
+  font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: .1px;
+}
+
+.player-frame {
   position: relative;
+  padding-bottom: 56.25%;
+  background: var(--ink);
 }
-.video-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0;
-  height: 3px; background: linear-gradient(90deg, var(--green), #08E8C0); z-index: 2;
+.player-frame iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; border: none;
 }
 
-.card-chrome {
+.player-bottom {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px; background: var(--gray-50); border-bottom: 1px solid var(--border);
+  padding: 14px 18px;
+  background: var(--cream);
+  border-top: 1px solid var(--stone);
 }
-.chrome-dots { display: flex; gap: 7px; }
-.chrome-dot { width: 11px; height: 11px; border-radius: 50%; }
-.cd-r { background: #FF5F57; } .cd-y { background: #FFBD2E; } .cd-g { background: #28C840; }
-.chrome-label { font-size: 11px; font-weight: 500; color: var(--gray-400); }
 
-.video-ratio { position: relative; padding-bottom: 56.25%; background: #0B0B0B; }
-.video-ratio iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-
-.card-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px; background: var(--gray-50); border-top: 1px solid var(--border);
+.pb-time {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 500; color: var(--dim);
 }
-.footer-duration { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: var(--gray-400); }
-.clock-icon { width: 13px; height: 13px; opacity: .6; }
-.footer-cta { font-size: 12px; font-weight: 600; color: var(--black); }
-.footer-cta span { color: var(--green); }
+.pb-time svg { width: 12px; height: 12px; opacity: .5; }
 
-.badge-delivered {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 8px 16px; background: var(--green-dim);
-  border: 1px solid rgba(28,224,160,0.25); border-radius: 100px;
-  margin-top: 20px; font-size: 12px; font-weight: 600; color: #0D7A5A;
+.pb-tag {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .8px; text-transform: uppercase;
+  color: var(--muted);
 }
-.check-icon {
-  width: 14px; height: 14px; background: var(--green); border-radius: 50%;
+
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-mid);
+  border-radius: 100px;
+  margin-top: 16px;
+  font-size: 11px; font-weight: 600; color: #0D7A5A;
+}
+.status-check {
+  width: 13px; height: 13px;
+  background: var(--accent); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
 }
-.check-icon::after {
-  content: ''; width: 5px; height: 3px;
-  border-left: 1.5px solid white; border-bottom: 1.5px solid white;
-  transform: rotate(-45deg) translateY(-1px);
+.status-check::after {
+  content: ''; width: 4px; height: 2.5px;
+  border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff;
+  transform: rotate(-45deg) translateY(-0.5px);
 }
 
-/* ══════════════════════════════════════
-   DIAGNOSTIC DNS — DARK TERMINAL CARD
-   ══════════════════════════════════════ */
+/* ══════════════════════════════
+   DIAGNOSTIC — DARK TERMINAL
+   ══════════════════════════════ */
 
-.diag-section {
-  opacity: 0; transform: translateY(30px);
-  animation: up .75s cubic-bezier(.16,1,.3,1) .35s forwards;
+.diag {
+  opacity: 0; transform: translateY(16px);
+  animation: rise .7s cubic-bezier(.22,1,.36,1) .4s forwards;
 }
 
-.diag-card {
+.terminal {
   background: var(--scan-bg);
-  border-radius: 20px;
-  border: 1px solid var(--scan-border);
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.02),
-    0 8px 32px rgba(0,0,0,.25),
-    0 40px 80px rgba(0,0,0,.2);
-  position: relative;
+  border: 1px solid var(--scan-border);
+  box-shadow: 0 2px 4px rgba(0,0,0,.15), 0 16px 48px rgba(0,0,0,.2);
 }
 
-/* Top glow line */
-.diag-card::before {
-  content: ''; position: absolute; top: 0; left: 10%; right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(28,224,160,0.4), transparent);
-}
-
-/* Header bar */
-.diag-top {
+.term-bar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 24px;
-  background: rgba(255,255,255,.02);
+  padding: 16px 22px;
+  background: var(--scan-surface);
   border-bottom: 1px solid var(--scan-border);
 }
 
-.diag-top-left {
-  display: flex; align-items: center; gap: 10px;
+.term-bar-left { display: flex; align-items: center; gap: 10px; }
+
+.term-pulse {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(28,224,160,.4);
+  animation: term-glow 2.5s ease-in-out infinite;
+}
+@keyframes term-glow {
+  0%,100% { opacity: .7; } 50% { opacity: 1; box-shadow: 0 0 12px rgba(28,224,160,.6); }
 }
 
-.diag-pulse {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px rgba(28,224,160,.5);
-  animation: glow-pulse 2s ease-in-out infinite;
-}
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(28,224,160,.3); }
-  50% { box-shadow: 0 0 16px rgba(28,224,160,.7); }
-}
-
-.diag-title {
+.term-title {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px; font-weight: 600; color: #fff;
-  letter-spacing: .5px; text-transform: uppercase;
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,.7);
+  letter-spacing: .8px; text-transform: uppercase;
 }
 
-.diag-domain-badge {
+.term-domain {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px; font-weight: 500;
-  color: var(--green); background: rgba(28,224,160,.08);
-  padding: 4px 12px; border-radius: 6px;
-  border: 1px solid rgba(28,224,160,.15);
+  color: var(--accent);
+  background: rgba(28,224,160,.06);
+  padding: 3px 10px; border-radius: 5px;
+  border: 1px solid rgba(28,224,160,.1);
 }
 
-/* Body */
-.diag-body { padding: 28px 24px; }
+.term-body { padding: 24px 22px 28px; }
 
-/* Loading state */
-.scan-loading {
-  display: flex; flex-direction: column; gap: 16px;
-  padding: 12px 0;
-}
+/* Scan steps */
+.steps { display: flex; flex-direction: column; gap: 14px; }
 
-.scan-step {
-  display: flex; align-items: center; gap: 12px;
+.step {
+  display: flex; align-items: center; gap: 11px;
   opacity: 0;
 }
+.step.on { animation: fadeIn .25s ease forwards; }
+.step.ok .step-spin { display: none; }
+.step.ok .step-done { display: flex; }
 
-.scan-step.active {
-  animation: fadeIn .3s ease forwards;
-}
+@keyframes fadeIn { to { opacity:1; } }
 
-.scan-step.done .scan-step-spinner { display: none; }
-.scan-step.done .scan-step-check { display: flex; }
-
-@keyframes fadeIn { to { opacity: 1; } }
-
-.scan-step-spinner {
-  width: 16px; height: 16px;
-  border: 2px solid rgba(255,255,255,.08);
-  border-top-color: var(--green);
+.step-spin {
+  width: 14px; height: 14px;
+  border: 1.5px solid rgba(255,255,255,.08);
+  border-top-color: var(--accent);
   border-radius: 50%;
-  animation: spin .6s linear infinite;
+  animation: sp .55s linear infinite;
   flex-shrink: 0;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes sp { to { transform: rotate(360deg); } }
 
-.scan-step-check {
+.step-done {
   display: none;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--green);
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent);
   align-items: center; justify-content: center; flex-shrink: 0;
 }
-.scan-step-check::after {
-  content: ''; width: 5px; height: 3px;
+.step-done::after {
+  content: ''; width: 4px; height: 2.5px;
   border-left: 1.5px solid var(--scan-bg);
   border-bottom: 1.5px solid var(--scan-bg);
   transform: rotate(-45deg) translateY(-0.5px);
 }
 
-.scan-step-text {
+.step-text {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px; color: var(--scan-text);
+  font-size: 11.5px; color: var(--scan-muted);
 }
-.scan-step.done .scan-step-text { color: rgba(255,255,255,.5); }
+.step.ok .step-text { color: rgba(255,255,255,.35); }
 
 /* Results */
-.diag-results { display: none; }
+.results { display: none; }
 
-.dns-row {
-  display: flex; align-items: flex-start; gap: 16px;
-  padding: 18px 0;
+.row {
+  display: flex; gap: 14px;
+  padding: 16px 0;
   border-bottom: 1px solid var(--scan-border);
-  opacity: 0; transform: translateY(8px);
+  opacity: 0; transform: translateY(6px);
 }
-.dns-row:last-child { border-bottom: none; }
-.dns-row.show { animation: rowIn .45s cubic-bezier(.16,1,.3,1) forwards; }
-@keyframes rowIn { to { opacity: 1; transform: translateY(0); } }
+.row:last-of-type { border-bottom: none; }
+.row.vis { animation: rowUp .4s cubic-bezier(.22,1,.36,1) forwards; }
+@keyframes rowUp { to { opacity:1; transform:translateY(0); } }
 
-/* Status indicator */
-.dns-status {
-  width: 36px; height: 36px; border-radius: 10px;
+.indicator {
+  width: 34px; height: 34px; border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0; margin-top: 2px;
-}
-.dns-status.ok { background: rgba(28,224,160,.1); }
-.dns-status.warn { background: rgba(255,159,28,.1); }
-.dns-status.bad { background: rgba(255,74,74,.1); }
-
-.dns-info { flex: 1; min-width: 0; }
-
-.dns-name-row {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
-}
-
-.dns-name {
+  flex-shrink: 0; margin-top: 1px;
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px; font-weight: 600; letter-spacing: .5px;
+  font-size: 13px; font-weight: 600;
 }
-.dns-name.ok { color: var(--green); }
-.dns-name.warn { color: var(--orange); }
-.dns-name.bad { color: var(--red); }
+.indicator.ok  { background: rgba(28,224,160,.08); color: var(--accent); }
+.indicator.warn { background: rgba(232,155,58,.08); color: var(--orange); }
+.indicator.bad { background: rgba(232,80,58,.08); color: var(--red); }
 
-.dns-badge {
+.row-body { flex: 1; min-width: 0; }
+
+.row-head { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+
+.row-name {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px; font-weight: 600; letter-spacing: .8px;
-  text-transform: uppercase;
-  padding: 2px 8px; border-radius: 4px;
+  font-size: 12.5px; font-weight: 600;
 }
-.dns-badge.ok { background: rgba(28,224,160,.1); color: var(--green); }
-.dns-badge.warn { background: rgba(255,159,28,.1); color: var(--orange); }
-.dns-badge.bad { background: rgba(255,74,74,.1); color: var(--red); }
+.row-name.ok { color: var(--accent); }
+.row-name.warn { color: var(--orange); }
+.row-name.bad { color: var(--red); }
 
-.dns-detail {
-  font-size: 13px; font-weight: 400;
-  color: var(--scan-text); line-height: 1.6;
+.row-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; font-weight: 600;
+  letter-spacing: .6px; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 3px;
+}
+.row-tag.ok { background: rgba(28,224,160,.08); color: var(--accent); }
+.row-tag.warn { background: rgba(232,155,58,.08); color: var(--orange); }
+.row-tag.bad { background: rgba(232,80,58,.08); color: var(--red); }
+
+.row-desc {
+  font-size: 12.5px; line-height: 1.65;
+  color: var(--scan-muted);
 }
 
-/* Score gauge */
-.score-wrap {
+/* Gauge */
+.gauge-area {
   display: none;
   text-align: center;
-  padding: 32px 0 16px;
+  padding: 28px 0 12px;
+  margin-top: 8px;
   border-top: 1px solid var(--scan-border);
-  margin-top: 12px;
 }
 
-.gauge-container {
-  position: relative;
-  width: 160px; height: 160px;
-  margin: 0 auto 16px;
+.gauge-ring { position: relative; width: 140px; height: 140px; margin: 0 auto 12px; }
+.gauge-ring svg { width: 140px; height: 140px; transform: rotate(-90deg); }
+.gauge-track { fill: none; stroke: rgba(255,255,255,.04); stroke-width: 7; }
+.gauge-arc {
+  fill: none; stroke-width: 7; stroke-linecap: round;
+  stroke-dasharray: 377; stroke-dashoffset: 377;
+  transition: stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1), stroke .4s;
 }
 
-.gauge-svg {
-  width: 160px; height: 160px;
-  transform: rotate(-90deg);
+.gauge-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%); text-align: center;
 }
-
-.gauge-bg {
-  fill: none; stroke: rgba(255,255,255,.05); stroke-width: 8;
+.gauge-val {
+  font-family: 'Instrument Serif', serif;
+  font-size: 44px; font-weight: 400;
+  line-height: 1; letter-spacing: -2px;
 }
-
-.gauge-fill {
-  fill: none; stroke-width: 8;
-  stroke-linecap: round;
-  stroke-dasharray: 408;
-  stroke-dashoffset: 408;
-  transition: stroke-dashoffset 1.5s cubic-bezier(.16,1,.3,1),
-              stroke .5s ease;
-  filter: drop-shadow(0 0 8px var(--green));
-}
-
-.gauge-score {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.gauge-number {
-  font-family: 'DM Serif Display', serif;
-  font-size: 48px; font-weight: 400;
-  line-height: 1;
-  letter-spacing: -2px;
-}
-
-.gauge-label {
+.gauge-sub {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px; font-weight: 500;
-  color: var(--scan-text);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-top: 4px;
+  font-size: 9px; font-weight: 500;
+  color: var(--scan-muted);
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin-top: 3px;
 }
 
 /* Verdict */
-.verdict-box {
+.verdict {
   display: none;
-  margin-top: 24px; padding: 20px;
-  border-radius: 14px;
+  margin-top: 22px; padding: 18px;
+  border-radius: 12px;
   border: 1px solid var(--scan-border);
-  background: rgba(255,255,255,.02);
+  background: var(--scan-surface);
 }
+.verdict p {
+  font-size: 13px; line-height: 1.7; color: var(--scan-text);
+}
+.verdict strong { color: #fff; font-weight: 600; }
 
-.verdict-text {
-  font-size: 14px; line-height: 1.7; color: var(--scan-text);
+/* Verify */
+.verify {
+  display: none; margin-top: 14px; text-align: center;
 }
-.verdict-text strong { color: #fff; font-weight: 600; }
-
-/* Verify link */
-.verify-line {
-  display: none;
-  margin-top: 16px;
-  text-align: center;
-}
-.verify-link {
+.verify a {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px; color: rgba(255,255,255,.25);
-  text-decoration: none; letter-spacing: .3px;
-  transition: color .15s;
-}
-.verify-link:hover { color: rgba(255,255,255,.5); }
-
-/* CTA */
-.diag-cta-wrap { display: none; margin-top: 28px; }
-
-.cta-audit {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; padding: 18px 24px;
-  background: var(--green); color: var(--scan-bg);
-  border: none; border-radius: 14px;
-  font-family: 'Inter', sans-serif;
-  font-size: 15px; font-weight: 700;
-  letter-spacing: -.3px; cursor: pointer;
-  text-decoration: none;
-  transition: all .2s;
-}
-.cta-audit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(28,224,160,.25);
-}
-.cta-audit-arrow {
-  font-size: 18px; transition: transform .2s;
-}
-.cta-audit:hover .cta-audit-arrow { transform: translateX(3px); }
-
-.cta-call {
-  display: block; text-align: center; margin-top: 12px;
-  font-size: 12px; font-weight: 500; color: var(--scan-text);
+  font-size: 10px; color: rgba(255,255,255,.2);
   text-decoration: none; transition: color .15s;
 }
-.cta-call:hover { color: #fff; }
+.verify a:hover { color: rgba(255,255,255,.45); }
+
+/* CTA */
+.cta-area { display: none; margin-top: 24px; }
+
+.cta-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 16px;
+  background: var(--accent); color: var(--scan-bg);
+  border: none; border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: -.2px; cursor: pointer;
+  text-decoration: none; transition: all .2s;
+}
+.cta-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(28,224,160,.2);
+}
+.cta-btn .arr { transition: transform .2s; }
+.cta-btn:hover .arr { transform: translateX(2px); }
+
+.cta-alt {
+  display: block; text-align: center; margin-top: 10px;
+  font-size: 11px; color: var(--scan-muted);
+  text-decoration: none; transition: color .15s;
+}
+.cta-alt:hover { color: #fff; }
 
 /* ─── Footer ─── */
-footer {
-  border-top: 1px solid var(--border); padding: 22px 48px;
+.foot {
+  padding: 20px 40px;
   display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid var(--stone);
 }
-.footer-brand { font-size: 12px; color: var(--gray-400); }
-.footer-brand strong { color: var(--black); font-weight: 600; }
-.footer-legal { font-size: 11px; color: var(--gray-400); }
+.foot-left { font-size: 11px; color: var(--dim); }
+.foot-left b { color: var(--ink); font-weight: 600; }
+.foot-right { font-size: 10px; color: var(--dim); letter-spacing: .3px; }
 
-/* ─── Responsive ─── */
-@media (max-width: 600px) {
-  main { padding: 48px 20px 64px; gap: 40px; }
-  header { padding: 20px 20px; }
-  footer { padding: 18px 20px; flex-direction: column; gap: 6px; align-items: flex-start; }
-  h1 { letter-spacing: -1.5px; }
-  .stats { gap: 20px; }
-  .stat-value { font-size: 22px; }
-  .diag-body { padding: 20px 16px; }
-  .diag-top { padding: 14px 16px; }
-  .gauge-container { width: 130px; height: 130px; }
-  .gauge-svg { width: 130px; height: 130px; }
-  .gauge-number { font-size: 40px; }
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .content { padding: 40px 20px 80px; }
+  .topbar { padding: 18px 20px; }
+  .foot { padding: 16px 20px; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .headline { letter-spacing: -.5px; }
+  .kpis { gap: 24px; }
+  .kpi-num { font-size: 26px; }
+  .term-body { padding: 20px 16px 24px; }
+  .term-bar { padding: 14px 16px; }
+  .gauge-ring { width: 120px; height: 120px; }
+  .gauge-ring svg { width: 120px; height: 120px; }
+  .gauge-val { font-size: 36px; }
 }
 </style>
 </head>
 <body>
 
-<div class="page">
+<div class="shell">
 
-  <header>
-    <a class="logo" href="https://konverti.co" target="_blank" rel="noopener">
-      <span class="logo-text">Konverti</span>
-    </a>
-    <div class="header-right">
-      <div class="live-dot"></div>
-      <span class="live-label">Message personnel</span>
+  <!-- Topbar -->
+  <div class="topbar">
+    <a class="mark" href="https://konverti.co" target="_blank">Konverti</a>
+    <div class="topbar-right">
+      <div class="pulse-ring"></div>
+      <span class="topbar-label">Message personnel</span>
     </div>
-  </header>
+  </div>
 
-  <main>
+  <div class="content">
 
-    <!-- ── Intro ── -->
-    <div class="left">
-      <div class="tag">
-        <div class="tag-dot"></div>
-        <span class="tag-text">Vidéo exclusive</span>
+    <!-- Hero -->
+    <div class="hero">
+      <div class="pill">
+        <div class="pill-dot"></div>
+        <span class="pill-text">Préparé pour vous</span>
       </div>
-      <h1>60 secondes<br>pour <span class="h1-company" id="companyDisplay">vous</span>.</h1>
-      <div class="stats">
-        <div class="stat-item">
-          <div class="stat-value">21</div>
-          <div class="stat-label">Jours livraison</div>
+      <h1 class="headline">
+        60 secondes<br>pour <em id="companyDisplay">vous</em>.
+      </h1>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-num">21j</div>
+          <div class="kpi-label">Livraison</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-value green">1 000</div>
-          <div class="stat-label">Prospects chargés</div>
+        <div class="kpi">
+          <div class="kpi-num g">1 000</div>
+          <div class="kpi-label">Prospects chargés</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-value">5</div>
-          <div class="stat-label">Domaines dédiés</div>
+        <div class="kpi">
+          <div class="kpi-num">5</div>
+          <div class="kpi-label">Domaines dédiés</div>
         </div>
       </div>
     </div>
 
-    <!-- ── Vidéo ── -->
-    <div class="right">
-      <div class="video-card">
-        <div class="card-chrome">
-          <div class="chrome-dots">
-            <div class="chrome-dot cd-r"></div>
-            <div class="chrome-dot cd-y"></div>
-            <div class="chrome-dot cd-g"></div>
+    <!-- Video -->
+    <div class="video-wrap">
+      <div class="player">
+        <div class="player-bar">
+          <div class="bar-dots">
+            <div class="bar-dot dot-r"></div>
+            <div class="bar-dot dot-y"></div>
+            <div class="bar-dot dot-g"></div>
           </div>
-          <span class="chrome-label">Royce Pfirsch · Fondateur, Konverti</span>
+          <span class="bar-name">Royce Pfirsch · Fondateur</span>
         </div>
-        <div class="video-ratio">
+        <div class="player-frame">
           <iframe src="https://www.loom.com/embed/d5bbbfabc31c46199ff97a837600bb09"
             frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
         </div>
-        <div class="card-footer">
-          <div class="footer-duration">
-            <svg class="clock-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4.5V7.2l1.8 1.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-            60 secondes
+        <div class="player-bottom">
+          <div class="pb-time">
+            <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4.5V7.2l1.8 1.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            60 sec
           </div>
-          <span class="footer-cta">Répondre à l'email <span>→</span></span>
+          <span class="pb-tag">Cold email infrastructure</span>
         </div>
       </div>
-      <div class="badge-delivered">
-        <div class="check-icon"></div>
+      <div class="status-pill">
+        <div class="status-check"></div>
         Infrastructure prête · DNS · Warm-up · Séquences
       </div>
     </div>
 
-    <!-- ══════════════════════════
-         DIAGNOSTIC DNS — DARK CARD
-         ══════════════════════════ -->
-    <div class="diag-section" id="diagSection" style="display:none;">
-      <div class="diag-card">
-
-        <div class="diag-top">
-          <div class="diag-top-left">
-            <div class="diag-pulse"></div>
-            <span class="diag-title">Diagnostic email</span>
+    <!-- Diagnostic -->
+    <div class="diag" id="diagSection" style="display:none;">
+      <div class="terminal">
+        <div class="term-bar">
+          <div class="term-bar-left">
+            <div class="term-pulse"></div>
+            <span class="term-title">Diagnostic email</span>
           </div>
-          <span class="diag-domain-badge" id="diagDomain"></span>
+          <span class="term-domain" id="diagDomain"></span>
         </div>
 
-        <div class="diag-body">
+        <div class="term-body">
 
-          <!-- Scanning animation -->
-          <div class="scan-loading" id="scanLoading">
-            <div class="scan-step" id="step1">
-              <div class="scan-step-spinner"></div>
-              <div class="scan-step-check"></div>
-              <span class="scan-step-text">Vérification de l'enregistrement SPF...</span>
+          <!-- Scan steps -->
+          <div class="steps" id="stepsWrap">
+            <div class="step" id="s1">
+              <div class="step-spin"></div><div class="step-done"></div>
+              <span class="step-text">Vérification SPF...</span>
             </div>
-            <div class="scan-step" id="step2">
-              <div class="scan-step-spinner"></div>
-              <div class="scan-step-check"></div>
-              <span class="scan-step-text">Analyse de la politique DMARC...</span>
+            <div class="step" id="s2">
+              <div class="step-spin"></div><div class="step-done"></div>
+              <span class="step-text">Analyse DMARC...</span>
             </div>
-            <div class="scan-step" id="step3">
-              <div class="scan-step-spinner"></div>
-              <div class="scan-step-check"></div>
-              <span class="scan-step-text">Recherche des signatures DKIM...</span>
+            <div class="step" id="s3">
+              <div class="step-spin"></div><div class="step-done"></div>
+              <span class="step-text">Recherche DKIM...</span>
             </div>
           </div>
 
           <!-- Results -->
-          <div class="diag-results" id="diagResults">
-            <div class="dns-row" id="rowSPF">
-              <div class="dns-status" id="statusSPF"></div>
-              <div class="dns-info">
-                <div class="dns-name-row">
-                  <span class="dns-name" id="nameSPF">SPF</span>
-                  <span class="dns-badge" id="badgeSPF"></span>
+          <div class="results" id="results">
+            <div class="row" id="rSPF">
+              <div class="indicator" id="iSPF"></div>
+              <div class="row-body">
+                <div class="row-head">
+                  <span class="row-name" id="nSPF">SPF</span>
+                  <span class="row-tag" id="tSPF"></span>
                 </div>
-                <div class="dns-detail" id="detailSPF"></div>
+                <div class="row-desc" id="dSPF"></div>
               </div>
             </div>
-            <div class="dns-row" id="rowDMARC">
-              <div class="dns-status" id="statusDMARC"></div>
-              <div class="dns-info">
-                <div class="dns-name-row">
-                  <span class="dns-name" id="nameDMARC">DMARC</span>
-                  <span class="dns-badge" id="badgeDMARC"></span>
+            <div class="row" id="rDMARC">
+              <div class="indicator" id="iDMARC"></div>
+              <div class="row-body">
+                <div class="row-head">
+                  <span class="row-name" id="nDMARC">DMARC</span>
+                  <span class="row-tag" id="tDMARC"></span>
                 </div>
-                <div class="dns-detail" id="detailDMARC"></div>
+                <div class="row-desc" id="dDMARC"></div>
               </div>
             </div>
-            <div class="dns-row" id="rowDKIM">
-              <div class="dns-status" id="statusDKIM"></div>
-              <div class="dns-info">
-                <div class="dns-name-row">
-                  <span class="dns-name" id="nameDKIM">DKIM</span>
-                  <span class="dns-badge" id="badgeDKIM"></span>
+            <div class="row" id="rDKIM">
+              <div class="indicator" id="iDKIM"></div>
+              <div class="row-body">
+                <div class="row-head">
+                  <span class="row-name" id="nDKIM">DKIM</span>
+                  <span class="row-tag" id="tDKIM"></span>
                 </div>
-                <div class="dns-detail" id="detailDKIM"></div>
+                <div class="row-desc" id="dDKIM"></div>
               </div>
             </div>
           </div>
 
-          <!-- Score gauge -->
-          <div class="score-wrap" id="scoreWrap">
-            <div class="gauge-container">
-              <svg class="gauge-svg" viewBox="0 0 160 160">
-                <circle class="gauge-bg" cx="80" cy="80" r="65"/>
-                <circle class="gauge-fill" id="gaugeFill" cx="80" cy="80" r="65"/>
+          <!-- Score -->
+          <div class="gauge-area" id="gaugeArea">
+            <div class="gauge-ring">
+              <svg viewBox="0 0 140 140">
+                <circle class="gauge-track" cx="70" cy="70" r="60"/>
+                <circle class="gauge-arc" id="arc" cx="70" cy="70" r="60"/>
               </svg>
-              <div class="gauge-score">
-                <div class="gauge-number" id="gaugeNumber">0</div>
-                <div class="gauge-label">sur 100</div>
+              <div class="gauge-center">
+                <div class="gauge-val" id="gVal">0</div>
+                <div class="gauge-sub">sur 100</div>
               </div>
             </div>
           </div>
 
           <!-- Verdict -->
-          <div class="verdict-box" id="verdictBox">
-            <div class="verdict-text" id="verdictText"></div>
-          </div>
+          <div class="verdict" id="vBox"><p id="vText"></p></div>
 
           <!-- Verify -->
-          <div class="verify-line" id="verifyLine">
-            <a class="verify-link" id="verifyLink" href="#" target="_blank">
-              ↗ Vérifier sur MXToolbox (données DNS publiques)
-            </a>
+          <div class="verify" id="vfy">
+            <a id="vfyLink" href="#" target="_blank">Vérifier ces données sur MXToolbox ↗</a>
           </div>
 
           <!-- CTA -->
-          <div class="diag-cta-wrap" id="diagCta">
-            <a class="cta-audit" id="ctaAudit" href="#">
-              Audit complet gratuit — 2 minutes
-              <span class="cta-audit-arrow">→</span>
+          <div class="cta-area" id="ctaArea">
+            <a class="cta-btn" id="ctaLink" href="#">
+              Audit complet gratuit — 2 minutes <span class="arr">→</span>
             </a>
-            <a class="cta-call" href="https://calendly.com/konverti/15min" target="_blank">
-              ou réserver un appel de 15 min avec Royce
+            <a class="cta-alt" href="https://calendly.com/konverti/15min" target="_blank">
+              ou réserver 15 min avec Royce
             </a>
           </div>
 
@@ -667,190 +678,123 @@ footer {
       </div>
     </div>
 
-  </main>
+  </div>
 
-  <footer>
-    <div class="footer-brand">Envoyé par <strong>Royce Pfirsch</strong> · Konverti</div>
-    <div class="footer-legal">Cold email infrastructure · France</div>
-  </footer>
+  <div class="foot">
+    <div class="foot-left">Envoyé par <b>Royce Pfirsch</b> · Konverti</div>
+    <div class="foot-right">Cold email infrastructure · France</div>
+  </div>
 
 </div>
 
 <script>
-/* ─── URL Params ─── */
-const params  = new URLSearchParams(window.location.search);
-const company = params.get('company');
-const domain  = params.get('d');
+const P = new URLSearchParams(location.search);
+const co = P.get('company'), dom = P.get('d');
 
-if (company) {
-  document.getElementById('companyDisplay').textContent = company;
-  document.title = `Konverti — ${company}`;
-}
-
-if (domain) {
+if (co) { document.getElementById('companyDisplay').textContent = co; document.title = `Konverti — ${co}`; }
+if (dom) {
   document.getElementById('diagSection').style.display = '';
-  document.getElementById('diagDomain').textContent = domain;
-  document.getElementById('ctaAudit').href = `https://audit.konverti.co?d=${encodeURIComponent(domain)}`;
-  document.getElementById('verifyLink').href = `https://mxtoolbox.com/SuperTool.aspx?action=dmarc%3a${encodeURIComponent(domain)}&run=toolpage`;
-  runScan(domain);
+  document.getElementById('diagDomain').textContent = dom;
+  document.getElementById('ctaLink').href = `https://audit.konverti.co?d=${encodeURIComponent(dom)}`;
+  document.getElementById('vfyLink').href = `https://mxtoolbox.com/SuperTool.aspx?action=dmarc%3a${encodeURIComponent(dom)}&run=toolpage`;
+  scan(dom);
 }
 
-/* ─── DNS over HTTPS ─── */
-async function dns(name, type) {
-  try {
-    const r = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(name)}&type=${type}`);
-    return await r.json();
-  } catch { return { Answer: [] }; }
-}
+async function q(n,t){try{const r=await fetch(`https://dns.google/resolve?name=${encodeURIComponent(n)}&type=${t}`);return await r.json();}catch{return{Answer:[]};}}
 
-/* ─── Checks ─── */
-async function checkSPF(d) {
-  const data = await dns(d, 'TXT');
-  if (!data.Answer) return { s:'bad', emoji:'✕', badge:'Absent', detail:'Aucun enregistrement SPF trouvé. Les serveurs de vos prospects ne peuvent pas vérifier que vos emails sont légitimes — risque élevé de placement en spam.', score:0 };
-  for (const a of data.Answer) {
-    const t = (a.data||'').replace(/"/g,'');
-    if (!t.includes('v=spf1')) continue;
-    if (t.includes('-all')) return { s:'ok', emoji:'✓', badge:'Strict', detail:'SPF correctement configuré avec une politique stricte (-all). Seuls vos serveurs autorisés peuvent envoyer en votre nom.', score:35 };
-    if (t.includes('~all')) return { s:'warn', emoji:'!', badge:'Softfail', detail:'SPF présent mais en softfail (~all). Les emails non autorisés ne sont pas strictement bloqués — certains serveurs les laisseront passer.', score:20 };
-    if (t.includes('+all')) return { s:'bad', emoji:'✕', badge:'Critique', detail:'SPF en +all — n\'importe quel serveur peut envoyer des emails depuis votre domaine. Faille de sécurité critique.', score:0 };
-    return { s:'warn', emoji:'!', badge:'Incomplet', detail:'SPF présent mais sans directive de blocage explicite. Protection partielle.', score:20 };
+async function spf(d){
+  const x=await q(d,'TXT');
+  if(!x.Answer)return{c:'bad',e:'✕',b:'Absent',t:'Aucun enregistrement SPF trouvé. Les serveurs destinataires ne peuvent pas vérifier que vos emails sont légitimes.',p:0};
+  for(const a of x.Answer){const t=(a.data||'').replace(/"/g,'');
+    if(!t.includes('v=spf1'))continue;
+    if(t.includes('-all'))return{c:'ok',e:'✓',b:'Strict',t:'SPF correctement configuré avec une politique stricte. Seuls vos serveurs autorisés peuvent envoyer en votre nom.',p:35};
+    if(t.includes('~all'))return{c:'warn',e:'!',b:'Softfail',t:'SPF présent mais en softfail. Les emails non autorisés ne sont pas strictement bloqués par les serveurs destinataires.',p:20};
+    if(t.includes('+all'))return{c:'bad',e:'✕',b:'Critique',t:'SPF en +all — n\'importe quel serveur peut envoyer depuis votre domaine. Faille de sécurité majeure.',p:0};
+    return{c:'warn',e:'!',b:'Partiel',t:'SPF présent mais sans directive de blocage explicite.',p:20};
   }
-  return { s:'bad', emoji:'✕', badge:'Absent', detail:'Aucun enregistrement SPF détecté. Gmail et Outlook traitent par défaut vos emails comme suspects.', score:0 };
+  return{c:'bad',e:'✕',b:'Absent',t:'Aucun SPF détecté. Gmail et Outlook considèrent par défaut vos emails comme suspects.',p:0};
 }
 
-async function checkDMARC(d) {
-  const data = await dns(`_dmarc.${d}`, 'TXT');
-  if (!data.Answer) return { s:'bad', emoji:'✕', badge:'Absent', detail:'Aucune politique DMARC configurée. Votre domaine peut être usurpé librement, et vos emails commerciaux risquent d\'être filtrés sans que vous le sachiez.', score:0 };
-  for (const a of data.Answer) {
-    const t = (a.data||'').replace(/"/g,'');
-    if (!t.includes('v=DMARC1')) continue;
-    if (t.includes('p=reject')) return { s:'ok', emoji:'✓', badge:'Reject', detail:'Protection maximale. Les emails non autorisés envoyés depuis votre domaine sont rejetés par les serveurs destinataires.', score:35 };
-    if (t.includes('p=quarantine')) return { s:'ok', emoji:'✓', badge:'Quarantine', detail:'Bonne protection. Les emails suspects sont placés en quarantaine (dossier spam) par les serveurs destinataires.', score:35 };
-    if (t.includes('p=none')) return { s:'warn', emoji:'!', badge:'p=none', detail:'DMARC en mode observation uniquement. Vous recevez des rapports, mais aucun email frauduleux n\'est bloqué. Pas de protection réelle.', score:15 };
-    return { s:'warn', emoji:'!', badge:'Partiel', detail:'DMARC présent mais sans politique de blocage claire.', score:15 };
+async function dmarc(d){
+  const x=await q(`_dmarc.${d}`,'TXT');
+  if(!x.Answer)return{c:'bad',e:'✕',b:'Absent',t:'Aucune politique DMARC. Votre domaine peut être usurpé, et vos emails commerciaux risquent d\'être filtrés silencieusement.',p:0};
+  for(const a of x.Answer){const t=(a.data||'').replace(/"/g,'');
+    if(!t.includes('v=DMARC1'))continue;
+    if(t.includes('p=reject'))return{c:'ok',e:'✓',b:'Reject',t:'Protection maximale. Les emails frauduleux envoyés depuis votre domaine sont rejetés.',p:35};
+    if(t.includes('p=quarantine'))return{c:'ok',e:'✓',b:'Quarantine',t:'Bonne protection. Les emails suspects sont orientés en spam par les destinataires.',p:35};
+    if(t.includes('p=none'))return{c:'warn',e:'!',b:'p=none',t:'Mode observation uniquement. Vous recevez des rapports mais aucun email non autorisé n\'est bloqué.',p:15};
+    return{c:'warn',e:'!',b:'Partiel',t:'DMARC présent sans politique de blocage claire.',p:15};
   }
-  return { s:'bad', emoji:'✕', badge:'Absent', detail:'Aucune politique DMARC. Depuis 2024, Gmail et Yahoo rejettent ou filtrent les emails provenant de domaines sans DMARC.', score:0 };
+  return{c:'bad',e:'✕',b:'Absent',t:'Pas de DMARC. Depuis 2024, Gmail et Yahoo filtrent les expéditeurs sans DMARC.',p:0};
 }
 
-async function checkDKIM(d) {
-  const sels = ['default','google','selector1','selector2','k1','k2','mail','dkim','brevo','sendinblue','protonmail','zoho','mxvault','cm','pm','mandrill','mailchimp','smtp'];
-  for (const s of sels) {
-    try {
-      const data = await dns(`${s}._domainkey.${d}`, 'TXT');
-      if (data.Answer) for (const a of data.Answer) { if ((a.data||'').includes('p=')) return { s:'ok', emoji:'✓', badge:'Vérifié', detail:`Signature DKIM trouvée (sélecteur : ${s}). Vos emails portent une preuve cryptographique d'authenticité.`, score:30 }; }
-    } catch {}
-    try {
-      const data = await dns(`${s}._domainkey.${d}`, 'CNAME');
-      if (data.Answer && data.Answer.length) return { s:'ok', emoji:'✓', badge:'Vérifié', detail:`Signature DKIM trouvée (sélecteur : ${s}). Vos emails portent une preuve cryptographique d'authenticité.`, score:30 };
-    } catch {}
+async function dkim(d){
+  const ss=['default','google','selector1','selector2','k1','k2','mail','dkim','brevo','sendinblue','protonmail','zoho','mandrill','mailchimp','cm','pm','smtp','mxvault'];
+  for(const s of ss){
+    try{const x=await q(`${s}._domainkey.${d}`,'TXT');if(x.Answer)for(const a of x.Answer)if((a.data||'').includes('p='))return{c:'ok',e:'✓',b:'Vérifié',t:`Signature DKIM trouvée (sélecteur : ${s}). Vos emails portent une preuve cryptographique d'authenticité.`,p:30};}catch{}
+    try{const x=await q(`${s}._domainkey.${d}`,'CNAME');if(x.Answer&&x.Answer.length)return{c:'ok',e:'✓',b:'Vérifié',t:`Signature DKIM détectée via ${s}. Vos emails sont authentifiés.`,p:30};}catch{}
   }
-  return { s:'warn', emoji:'?', badge:'Non détecté', detail:'Aucune signature DKIM trouvée sur les sélecteurs courants. Cela ne signifie pas forcément qu\'il est absent — votre fournisseur utilise peut-être un sélecteur personnalisé.', score:0 };
+  return{c:'warn',e:'?',b:'Non détecté',t:'Aucune signature trouvée sur les sélecteurs courants. Votre fournisseur utilise peut-être un sélecteur personnalisé — cela ne signifie pas nécessairement une absence de DKIM.',p:0};
 }
 
-/* ─── Scan orchestration ─── */
-async function runScan(domain) {
-  const s1 = document.getElementById('step1');
-  const s2 = document.getElementById('step2');
-  const s3 = document.getElementById('step3');
+async function scan(d){
+  const s1=document.getElementById('s1'),s2=document.getElementById('s2'),s3=document.getElementById('s3');
 
-  // Step 1: SPF
-  s1.classList.add('active');
-  const spf = await checkSPF(domain);
-  s1.classList.add('done');
+  s1.classList.add('on');
+  const rSPF=await spf(d); s1.classList.add('ok');
+  await w(250);
+  s2.classList.add('on');
+  const rDMARC=await dmarc(d); s2.classList.add('ok');
+  await w(250);
+  s3.classList.add('on');
+  const rDKIM=await dkim(d); s3.classList.add('ok');
 
-  // Step 2: DMARC
-  await pause(200);
-  s2.classList.add('active');
-  const dmarc = await checkDMARC(domain);
-  s2.classList.add('done');
+  const sc=(rSPF.p||0)+(rDMARC.p||0)+(rDKIM.p||0);
+  await w(600);
 
-  // Step 3: DKIM
-  await pause(200);
-  s3.classList.add('active');
-  const dkim = await checkDKIM(domain);
-  s3.classList.add('done');
+  document.getElementById('stepsWrap').style.display='none';
+  document.getElementById('results').style.display='block';
 
-  const score = (spf.score||0) + (dmarc.score||0) + (dkim.score||0);
+  fill('SPF',rSPF); setTimeout(()=>document.getElementById('rSPF').classList.add('vis'),50);
+  setTimeout(()=>{fill('DMARC',rDMARC);document.getElementById('rDMARC').classList.add('vis');},300);
+  setTimeout(()=>{fill('DKIM',rDKIM);document.getElementById('rDKIM').classList.add('vis');},600);
 
-  // Transition to results
-  await pause(500);
-  document.getElementById('scanLoading').style.display = 'none';
-  document.getElementById('diagResults').style.display = 'block';
+  setTimeout(()=>{
+    document.getElementById('gaugeArea').style.display='block';
+    const col=sc>=80?'var(--accent)':sc>=50?'var(--orange)':'var(--red)';
+    const glow=sc>=80?'rgba(28,224,160,.3)':sc>=50?'rgba(232,155,58,.3)':'rgba(232,80,58,.3)';
+    const arc=document.getElementById('arc');
+    arc.style.stroke=col;
+    arc.style.filter=`drop-shadow(0 0 8px ${glow})`;
+    const circ=2*Math.PI*60;
+    arc.style.strokeDasharray=circ;
+    setTimeout(()=>{arc.style.strokeDashoffset=circ-(sc/100)*circ;},60);
+    const v=document.getElementById('gVal');v.style.color=col;
+    let c=0;const step=Math.max(1,Math.ceil(sc/45));
+    const iv=setInterval(()=>{c+=step;if(c>=sc){c=sc;clearInterval(iv);}v.textContent=c;},28);
+  },950);
 
-  // Reveal rows
-  fillRow('SPF', spf);
-  setTimeout(() => document.getElementById('rowSPF').classList.add('show'), 50);
-  setTimeout(() => { fillRow('DMARC', dmarc); document.getElementById('rowDMARC').classList.add('show'); }, 350);
-  setTimeout(() => { fillRow('DKIM', dkim); document.getElementById('rowDKIM').classList.add('show'); }, 700);
+  setTimeout(()=>{
+    const b=document.getElementById('vBox'),t=document.getElementById('vText');b.style.display='block';
+    if(sc<50){b.style.borderColor='rgba(232,80,58,.1)';b.style.background='rgba(232,80,58,.03)';t.innerHTML='<strong>Risque élevé de filtrage.</strong> Une partie significative de vos emails commerciaux n\'atteint probablement jamais la boîte de réception de vos prospects. C\'est un problème d\'infrastructure — il se corrige.';}
+    else if(sc<80){b.style.borderColor='rgba(232,155,58,.1)';b.style.background='rgba(232,155,58,.03)';t.innerHTML='<strong>Configuration partielle.</strong> Certains emails arrivent, d\'autres non — sans visibilité sur lesquels. Quelques ajustements techniques changeraient la donne.';}
+    else{b.style.borderColor='rgba(28,224,160,.1)';b.style.background='rgba(28,224,160,.03)';t.innerHTML='<strong>Base technique solide.</strong> Votre infrastructure email est en place. La question : est-ce que vous l\'exploitez avec un système d\'outbound structuré ?';}
+  },1700);
 
-  // Score gauge
-  setTimeout(() => {
-    document.getElementById('scoreWrap').style.display = 'block';
-    const color = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--orange)' : 'var(--red)';
-    const fill = document.getElementById('gaugeFill');
-    fill.style.stroke = color;
-    fill.style.filter = `drop-shadow(0 0 10px ${score >= 80 ? 'rgba(28,224,160,.4)' : score >= 50 ? 'rgba(255,159,28,.4)' : 'rgba(255,74,74,.4)'})`;
-    const circumference = 2 * Math.PI * 65; // ~408
-    const offset = circumference - (score / 100) * circumference;
-    setTimeout(() => { fill.style.strokeDashoffset = offset; }, 50);
-
-    const numEl = document.getElementById('gaugeNumber');
-    numEl.style.color = color;
-    animateNum(numEl, score);
-  }, 1050);
-
-  // Verdict
-  setTimeout(() => {
-    const box = document.getElementById('verdictBox');
-    const txt = document.getElementById('verdictText');
-    box.style.display = 'block';
-    if (score < 50) {
-      box.style.borderColor = 'rgba(255,74,74,.12)';
-      box.style.background = 'rgba(255,74,74,.04)';
-      txt.innerHTML = `<strong>Vos emails commerciaux risquent fortement d'être filtrés.</strong> Les DSI et CTO que vous essayez d'atteindre ne voient probablement jamais vos messages. C'est un problème d'infrastructure, pas de copywriting — et ça se corrige.`;
-    } else if (score < 80) {
-      box.style.borderColor = 'rgba(255,159,28,.12)';
-      box.style.background = 'rgba(255,159,28,.04)';
-      txt.innerHTML = `<strong>Configuration partielle.</strong> Certains emails passent, d'autres non — sans visibilité sur lesquels. Quelques ajustements techniques changeraient significativement votre délivrabilité.`;
-    } else {
-      box.style.borderColor = 'rgba(28,224,160,.12)';
-      box.style.background = 'rgba(28,224,160,.04)';
-      txt.innerHTML = `<strong>Infrastructure email solide.</strong> La base technique est en place. La question : est-ce que vous exploitez ce potentiel avec un système d'outbound structuré pour atteindre les décideurs que vous ciblez ?`;
-    }
-  }, 1800);
-
-  // Verify + CTA
-  setTimeout(() => {
-    document.getElementById('verifyLine').style.display = 'block';
-    document.getElementById('diagCta').style.display = 'block';
-  }, 2200);
+  setTimeout(()=>{
+    document.getElementById('vfy').style.display='block';
+    document.getElementById('ctaArea').style.display='block';
+  },2100);
 }
 
-function fillRow(key, data) {
-  const st = document.getElementById(`status${key}`);
-  st.className = `dns-status ${data.s === 'ok' ? 'ok' : data.s === 'warn' ? 'warn' : 'bad'}`;
-  st.textContent = data.emoji;
-
-  const nm = document.getElementById(`name${key}`);
-  nm.className = `dns-name ${data.s === 'ok' ? 'ok' : data.s === 'warn' ? 'warn' : 'bad'}`;
-
-  const bg = document.getElementById(`badge${key}`);
-  bg.className = `dns-badge ${data.s === 'ok' ? 'ok' : data.s === 'warn' ? 'warn' : 'bad'}`;
-  bg.textContent = data.badge;
-
-  document.getElementById(`detail${key}`).textContent = data.detail;
+function fill(k,d){
+  const i=document.getElementById('i'+k);i.className=`indicator ${d.c==='ok'?'ok':d.c==='warn'?'warn':'bad'}`;i.textContent=d.e;
+  const n=document.getElementById('n'+k);n.className=`row-name ${d.c==='ok'?'ok':d.c==='warn'?'warn':'bad'}`;
+  const t=document.getElementById('t'+k);t.className=`row-tag ${d.c==='ok'?'ok':d.c==='warn'?'warn':'bad'}`;t.textContent=d.b;
+  document.getElementById('d'+k).textContent=d.t;
 }
 
-function animateNum(el, target) {
-  let c = 0;
-  const step = Math.max(1, Math.ceil(target / 50));
-  const iv = setInterval(() => {
-    c += step; if (c >= target) { c = target; clearInterval(iv); }
-    el.textContent = c;
-  }, 25);
-}
-
-function pause(ms) { return new Promise(r => setTimeout(r, ms)); }
+function w(ms){return new Promise(r=>setTimeout(r,ms));}
 </script>
 
 </body>
