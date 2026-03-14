@@ -306,6 +306,13 @@ body {
 .term-body { padding: 24px 22px 28px; }
 
 /* Scan steps */
+.scan-wait { padding: 8px 0; }
+.scan-wait-inner {
+  display: flex; align-items: center; gap: 10px;
+  opacity: 0;
+  animation: fadeIn .5s ease .3s forwards;
+}
+
 .steps { display: flex; flex-direction: column; gap: 14px; }
 
 .step {
@@ -676,8 +683,16 @@ body {
 
         <div class="term-body">
 
+          <!-- Waiting state -->
+          <div class="scan-wait" id="scanWait">
+            <div class="scan-wait-inner">
+              <div class="term-pulse" style="width:6px;height:6px;"></div>
+              <span class="step-text" style="color:var(--scan-muted);">Analyse en cours de préparation...</span>
+            </div>
+          </div>
+
           <!-- Scan steps -->
-          <div class="steps" id="stepsWrap">
+          <div class="steps" id="stepsWrap" style="display:none;">
             <div class="step" id="s1">
               <div class="step-spin"></div><div class="step-done"></div>
               <span class="step-text">Vérification SPF...</span>
@@ -781,7 +796,10 @@ if (dom) {
   document.getElementById('diagDomain').textContent = dom;
   document.getElementById('ctaLink').href = `https://audit.konverti.co?d=${encodeURIComponent(dom)}`;
   document.getElementById('vfyLink').href = `https://mxtoolbox.com/SuperTool.aspx?action=dmarc%3a${encodeURIComponent(dom)}&run=toolpage`;
-  scan(dom);
+  setTimeout(() => {
+    document.getElementById('diagSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => scan(dom), 600);
+  }, 10000);
 }
 
 async function q(n,t){try{const r=await fetch(`https://dns.google/resolve?name=${encodeURIComponent(n)}&type=${t}`);return await r.json();}catch{return{Answer:[]};}}
@@ -822,6 +840,10 @@ async function dkim(d){
 }
 
 async function scan(d){
+  // Hide waiting, show scan steps
+  document.getElementById('scanWait').style.display='none';
+  document.getElementById('stepsWrap').style.display='flex';
+
   const s1=document.getElementById('s1'),s2=document.getElementById('s2'),s3=document.getElementById('s3');
 
   s1.classList.add('on');
