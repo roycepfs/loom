@@ -19,6 +19,10 @@
   --gray-400:#9A9A96;
   --gray-600:#5C5C58;
   --border:  rgba(0,0,0,0.07);
+  --red:     #FF4A4A;
+  --red-dim: rgba(255,74,74,0.08);
+  --orange:  #FFAA2E;
+  --orange-dim: rgba(255,170,46,0.08);
 }
 
 html, body {
@@ -30,7 +34,6 @@ html, body {
   text-rendering: optimizeLegibility;
 }
 
-/* ─── Page shell ─── */
 .page {
   min-height: 100vh;
   display: grid;
@@ -52,11 +55,9 @@ header {
   z-index: 10;
 }
 
-/* Logo SVG */
 .logo {
   display: flex;
   align-items: center;
-  gap: 0;
   text-decoration: none;
 }
 
@@ -200,8 +201,6 @@ h1 {
   border-top: 1px solid var(--border);
 }
 
-.stat-item {}
-
 .stat-value {
   font-size: 28px;
   font-weight: 900;
@@ -246,7 +245,6 @@ h1 {
   position: relative;
 }
 
-/* Top accent line */
 .video-card::before {
   content: '';
   position: absolute;
@@ -287,7 +285,6 @@ h1 {
   letter-spacing: 0.2px;
 }
 
-/* Video ratio */
 .video-ratio {
   position: relative;
   padding-bottom: 56.25%;
@@ -374,6 +371,207 @@ h1 {
   display: block;
 }
 
+/* ─── Diagnostic Card (NEW) ─── */
+.diag-section {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: up 0.75s cubic-bezier(0.16,1,0.3,1) 0.35s forwards;
+}
+
+.diag-card {
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.03),
+    0 4px 6px rgba(0,0,0,0.03),
+    0 12px 32px rgba(0,0,0,0.06);
+}
+
+.diag-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--border);
+}
+
+.diag-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diag-header-icon {
+  font-size: 14px;
+}
+
+.diag-header-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--black);
+  letter-spacing: -0.2px;
+}
+
+.diag-header-domain {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-400);
+  font-family: 'Inter', monospace;
+}
+
+.diag-body {
+  padding: 24px 20px;
+}
+
+.diag-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.diag-results { display: none; }
+
+.diag-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.diag-row:last-child { border-bottom: none; }
+
+.diag-row.show {
+  animation: slideIn 0.35s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+@keyframes slideIn {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.diag-emoji { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+.diag-info { flex: 1; }
+
+.diag-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.diag-label.ok { color: var(--green); }
+.diag-label.warn { color: var(--orange); }
+.diag-label.bad { color: var(--red); }
+
+.diag-detail {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gray-600);
+  line-height: 1.5;
+}
+
+.diag-score-section {
+  display: none;
+  text-align: center;
+  padding: 24px 0 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.diag-score-number {
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: -3px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.diag-score-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-400);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.diag-verdict {
+  display: none;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--gray-600);
+}
+
+.diag-verdict strong { color: var(--black); font-weight: 600; }
+
+.diag-verdict.bad-bg { background: var(--red-dim); border: 1px solid rgba(255,74,74,0.15); }
+.diag-verdict.warn-bg { background: var(--orange-dim); border: 1px solid rgba(255,170,46,0.15); }
+.diag-verdict.ok-bg { background: var(--green-dim); border: 1px solid rgba(28,224,160,0.15); }
+
+/* CTA */
+.diag-cta {
+  display: none;
+  margin-top: 20px;
+}
+
+.cta-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--green);
+  color: var(--black);
+  border: none;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.cta-main:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(28,224,160,0.3); }
+
+.cta-secondary {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-400);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.cta-secondary:hover { color: var(--black); }
+
 /* ─── Footer ─── */
 footer {
   border-top: 1px solid var(--border);
@@ -406,6 +604,9 @@ footer {
   header { padding: 20px 24px; }
   footer { padding: 18px 24px; flex-direction: column; gap: 6px; align-items: flex-start; }
   h1 { letter-spacing: -1.5px; }
+  .stats { gap: 20px; }
+  .stat-value { font-size: 24px; }
+  .diag-score-number { font-size: 44px; }
 }
 </style>
 </head>
@@ -413,7 +614,6 @@ footer {
 
 <div class="page">
 
-  <!-- ── Header ── -->
   <header>
     <a class="logo" href="https://konverti.co" target="_blank" rel="noopener">
       <span class="logo-text">Konverti</span>
@@ -424,12 +624,10 @@ footer {
     </div>
   </header>
 
-  <!-- ── Main ── -->
   <main>
 
-    <!-- Left -->
+    <!-- Intro -->
     <div class="left">
-
       <div class="tag">
         <div class="tag-dot"></div>
         <span class="tag-text">Vidéo exclusive</span>
@@ -453,10 +651,9 @@ footer {
           <div class="stat-label">Domaines dédiés</div>
         </div>
       </div>
-
     </div>
 
-    <!-- Right -->
+    <!-- Vidéo -->
     <div class="right">
       <div class="video-card">
         <div class="card-chrome">
@@ -474,8 +671,7 @@ footer {
             frameborder="0"
             webkitallowfullscreen
             mozallowfullscreen
-            allowfullscreen
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+            allowfullscreen>
           </iframe>
         </div>
 
@@ -497,9 +693,68 @@ footer {
       </div>
     </div>
 
+    <!-- Diagnostic DNS (NEW) -->
+    <div class="diag-section" id="diagSection" style="display:none;">
+      <div class="diag-card">
+        <div class="diag-header">
+          <div class="diag-header-left">
+            <span class="diag-header-icon">🔍</span>
+            <span class="diag-header-text">Diagnostic email</span>
+          </div>
+          <span class="diag-header-domain" id="diagDomain"></span>
+        </div>
+
+        <div class="diag-body">
+          <div class="diag-loading" id="diagLoading">
+            <div class="spinner"></div>
+            Analyse de votre configuration email...
+          </div>
+
+          <div class="diag-results" id="diagResults">
+            <div class="diag-row" id="rowSPF">
+              <span class="diag-emoji" id="emojiSPF"></span>
+              <div class="diag-info">
+                <div class="diag-label" id="labelSPF">SPF</div>
+                <div class="diag-detail" id="detailSPF"></div>
+              </div>
+            </div>
+            <div class="diag-row" id="rowDMARC">
+              <span class="diag-emoji" id="emojiDMARC"></span>
+              <div class="diag-info">
+                <div class="diag-label" id="labelDMARC">DMARC</div>
+                <div class="diag-detail" id="detailDMARC"></div>
+              </div>
+            </div>
+            <div class="diag-row" id="rowDKIM">
+              <span class="diag-emoji" id="emojiDKIM"></span>
+              <div class="diag-info">
+                <div class="diag-label" id="labelDKIM">DKIM</div>
+                <div class="diag-detail" id="detailDKIM"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="diag-score-section" id="scoreSection">
+            <div class="diag-score-number" id="scoreNumber">0</div>
+            <div class="diag-score-label">Score infrastructure / 100</div>
+          </div>
+
+          <div class="diag-verdict" id="verdict"></div>
+
+          <div class="diag-cta" id="diagCta">
+            <a class="cta-main" id="ctaAudit" href="#">
+              Audit complet gratuit → 2 min
+            </a>
+            <a class="cta-secondary" href="https://calendly.com/konverti/15min" target="_blank">
+              ou réserver un appel de 15 min avec Royce
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
-  <!-- ── Footer ── -->
   <footer>
     <div class="footer-brand">
       Envoyé par <strong>Royce Pfirsch</strong> · Konverti
@@ -512,16 +767,151 @@ footer {
 </div>
 
 <script>
-  const params  = new URLSearchParams(window.location.search);
-  const company = params.get('company');
-  const segment = params.get('v') || 'esn';
+// ─── URL Parameters ───
+const params  = new URLSearchParams(window.location.search);
+const company = params.get('company');
+const domain  = params.get('d');
 
-  if (company) {
-    document.getElementById('companyDisplay').textContent = company;
-    document.title = `Konverti — ${company}`;
+if (company) {
+  document.getElementById('companyDisplay').textContent = company;
+  document.title = `Konverti — ${company}`;
+}
+
+// ─── DNS Scan ───
+if (domain) {
+  document.getElementById('diagSection').style.display = '';
+  document.getElementById('diagDomain').textContent = domain;
+  document.getElementById('ctaAudit').href = `https://audit.konverti.co?d=${encodeURIComponent(domain)}`;
+  runScan(domain);
+}
+
+async function dnsQuery(name, type) {
+  try {
+    const resp = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(name)}&type=${type}`);
+    return await resp.json();
+  } catch (e) {
+    return { Answer: [] };
   }
+}
 
-  // Vidéo unique pour tous les segments
+async function checkSPF(domain) {
+  const data = await dnsQuery(domain, 'TXT');
+  if (!data.Answer) return { status: 'bad', emoji: '❌', label: 'SPF · Absent', detail: 'Aucun enregistrement SPF configuré. Les serveurs de vos prospects ne peuvent pas vérifier que vos emails sont légitimes.' };
+  for (const ans of data.Answer) {
+    const txt = (ans.data || '').replace(/"/g, '');
+    if (txt.includes('v=spf1')) {
+      if (txt.includes('-all')) return { status: 'ok', emoji: '✅', label: 'SPF · OK', detail: 'Votre SPF est correctement configuré avec une politique stricte.', score: 35 };
+      if (txt.includes('~all')) return { status: 'warn', emoji: '⚠️', label: 'SPF · Softfail', detail: 'SPF présent mais en softfail (~all). Les emails non autorisés ne sont pas strictement bloqués.', score: 20 };
+      if (txt.includes('+all')) return { status: 'bad', emoji: '❌', label: 'SPF · Dangereux', detail: 'SPF en +all : n\'importe qui peut envoyer des emails en votre nom. Critique.', score: 0 };
+      return { status: 'warn', emoji: '⚠️', label: 'SPF · Incomplet', detail: 'SPF présent mais sans directive de blocage claire.', score: 20 };
+    }
+  }
+  return { status: 'bad', emoji: '❌', label: 'SPF · Absent', detail: 'Aucun enregistrement SPF. Sans lui, Gmail et Outlook traitent vos emails comme suspects.', score: 0 };
+}
+
+async function checkDMARC(domain) {
+  const data = await dnsQuery(`_dmarc.${domain}`, 'TXT');
+  if (!data.Answer) return { status: 'bad', emoji: '❌', label: 'DMARC · Absent', detail: 'Aucun DMARC configuré. N\'importe qui peut usurper votre domaine, et vos emails ont un risque élevé de finir en spam.', score: 0 };
+  for (const ans of data.Answer) {
+    const txt = (ans.data || '').replace(/"/g, '');
+    if (txt.includes('v=DMARC1')) {
+      if (txt.includes('p=reject')) return { status: 'ok', emoji: '✅', label: 'DMARC · Reject', detail: 'Protection maximale. Les emails non autorisés sont rejetés.', score: 35 };
+      if (txt.includes('p=quarantine')) return { status: 'ok', emoji: '✅', label: 'DMARC · Quarantine', detail: 'Bonne protection. Les emails suspects sont mis en quarantaine.', score: 35 };
+      if (txt.includes('p=none')) return { status: 'warn', emoji: '⚠️', label: 'DMARC · p=none', detail: 'DMARC en mode observation uniquement. Aucun email n\'est bloqué, aucune protection réelle.', score: 15 };
+      return { status: 'warn', emoji: '⚠️', label: 'DMARC · Partiel', detail: 'DMARC présent mais sans politique de blocage claire.', score: 15 };
+    }
+  }
+  return { status: 'bad', emoji: '❌', label: 'DMARC · Absent', detail: 'Aucun DMARC configuré. Vos emails commerciaux sont probablement filtrés sans que vous le sachiez.', score: 0 };
+}
+
+async function checkDKIM(domain) {
+  const selectors = ['default','google','selector1','selector2','k1','mail','dkim','brevo','sendinblue','protonmail','zoho'];
+  for (const sel of selectors) {
+    const data = await dnsQuery(`${sel}._domainkey.${domain}`, 'TXT');
+    if (data.Answer) {
+      for (const ans of data.Answer) {
+        if ((ans.data || '').includes('p=')) return { status: 'ok', emoji: '✅', label: `DKIM · Trouvé`, detail: `Signature DKIM détectée (sélecteur : ${sel}). Vos emails sont authentifiés.`, score: 30 };
+      }
+    }
+    const cname = await dnsQuery(`${sel}._domainkey.${domain}`, 'CNAME');
+    if (cname.Answer && cname.Answer.length > 0) return { status: 'ok', emoji: '✅', label: `DKIM · Trouvé`, detail: `Signature DKIM détectée (sélecteur : ${sel}). Vos emails sont authentifiés.`, score: 30 };
+  }
+  return { status: 'warn', emoji: '⚠️', label: 'DKIM · Non détecté', detail: 'Aucun DKIM trouvé sur les sélecteurs courants. Vos emails n\'ont pas de signature d\'authenticité vérifiable.', score: 0 };
+}
+
+async function runScan(domain) {
+  // Show loading
+  document.getElementById('diagLoading').style.display = 'flex';
+  document.getElementById('diagResults').style.display = 'none';
+
+  const spf = await checkSPF(domain);
+  const dmarc = await checkDMARC(domain);
+  const dkim = await checkDKIM(domain);
+
+  const score = (spf.score || 0) + (dmarc.score || 0) + (dkim.score || 0);
+
+  // Hide loading, show results
+  document.getElementById('diagLoading').style.display = 'none';
+  document.getElementById('diagResults').style.display = 'block';
+
+  // SPF row
+  showRow('SPF', spf, 0);
+  // DMARC row
+  showRow('DMARC', dmarc, 300);
+  // DKIM row
+  showRow('DKIM', dkim, 600);
+
+  // Score animation
+  setTimeout(() => {
+    const scoreSection = document.getElementById('scoreSection');
+    scoreSection.style.display = 'block';
+    const scoreEl = document.getElementById('scoreNumber');
+    scoreEl.style.color = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--orange)' : 'var(--red)';
+    animateScore(scoreEl, score);
+  }, 900);
+
+  // Verdict
+  setTimeout(() => {
+    const verdict = document.getElementById('verdict');
+    verdict.style.display = 'block';
+    if (score < 50) {
+      verdict.className = 'diag-verdict bad-bg';
+      verdict.innerHTML = `<strong>Vos emails commerciaux ont un risque élevé de finir en spam.</strong> Les DSI et CTO que vous essayez d'atteindre ne voient probablement jamais vos messages. C'est un problème d'infrastructure, pas de copywriting.`;
+    } else if (score < 80) {
+      verdict.className = 'diag-verdict warn-bg';
+      verdict.innerHTML = `<strong>Configuration partielle.</strong> Certains emails passent, d'autres non — et vous n'avez aucune visibilité sur lesquels. Quelques ajustements techniques changeraient significativement votre délivrabilité.`;
+    } else {
+      verdict.className = 'diag-verdict ok-bg';
+      verdict.innerHTML = `<strong>Infrastructure email solide.</strong> La base technique est là. La question : est-ce que vous exploitez ce potentiel avec un système d'outbound structuré ?`;
+    }
+  }, 1200);
+
+  // CTA
+  setTimeout(() => {
+    document.getElementById('diagCta').style.display = 'block';
+  }, 1500);
+}
+
+function showRow(key, data, delay) {
+  setTimeout(() => {
+    document.getElementById(`emoji${key}`).textContent = data.emoji;
+    const label = document.getElementById(`label${key}`);
+    label.textContent = data.label;
+    label.className = `diag-label ${data.status === 'ok' ? 'ok' : data.status === 'warn' ? 'warn' : 'bad'}`;
+    document.getElementById(`detail${key}`).textContent = data.detail;
+    document.getElementById(`row${key}`).classList.add('show');
+  }, delay);
+}
+
+function animateScore(el, target) {
+  let current = 0;
+  const step = Math.max(1, Math.ceil(target / 40));
+  const interval = setInterval(() => {
+    current += step;
+    if (current >= target) { current = target; clearInterval(interval); }
+    el.textContent = current;
+  }, 30);
+}
 </script>
 
 </body>
